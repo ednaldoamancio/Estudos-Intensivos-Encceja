@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma - Rumo à Vitória!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --primary: #ff007f; /* Rosa neon */
+            --secondary: #7f00ff; /* Roxo neon */
+            --accent: #ffdd00; /* Amarelo pra destacar os horários */
+        }
+
+        /* Tema Escuro (Tela Noturna) */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        p.subtitle {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-acao {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .btn-acao:hover {
+            transform: scale(1.05);
+            background-color: #e60073;
+        }
+
+        .btn-voltar {
+            background-color: #555;
+        }
+
+        .btn-voltar:hover {
+            background-color: #333;
+        }
+
+        .schedule-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .day-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-left: 8px solid var(--secondary);
+            transition: transform 0.2s;
+        }
+
+        .day-card:hover {
+            transform: translateX(10px);
+            border-left-color: var(--primary);
+        }
+
+        .day-info {
+            flex-grow: 1;
+        }
+
+        .day-info h2 {
+            margin: 0 0 10px 0;
+            color: var(--primary);
+            font-size: 1.5em;
+        }
+
+        .time-block {
+            display: inline-block;
+            background-color: rgba(127, 0, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            border: 1px solid var(--secondary);
+        }
+
+        body.dark-mode .time-block {
+            background-color: rgba(127, 0, 255, 0.2);
+        }
+
+        .interval-block {
+            background-color: rgba(255, 221, 0, 0.2);
+            border-color: var(--accent);
+            color: #b39b00;
+        }
+
+        body.dark-mode .interval-block {
+            color: var(--accent);
+        }
+
+        .check-btn {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .check-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .check-btn.concluido {
+            background-color: #00cc66;
+            border-color: #00cc66;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9em;
+            opacity: 0.7;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="controls">
+            <button class="btn-acao btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button class="btn-acao" onclick="toggleDarkMode()">🌙 Tela Noturna</button>
+        </div>
+
+        <header>
+            <h1>O Paredão do Estudo</h1>
+            <p class="subtitle">3 horas por noite, sem caô. O diploma te espera!</p>
+        </header>
+
+        <div class="schedule-grid">
+            
+            <div class="day-card">
+                <div class="day-info">
+                    <h2>Segunda-feira: O Baile de Humanas 📜</h2>
+                    <span class="time-block">19:00 - 20:20 | História</span>
+                    <span class="time-block interval-block">20:20 - 20:40 | Intervalo / Lanche 🎧</span>
+                    <span class="time-block">20:40 - 22:00 | Geografia</span>
+                    <p>Dia de dominar o mundo com as matérias mais brabas (e aproveitar que o professor particular tá em casa!).</p>
+                </div>
+                <button class="check-btn" onclick="marcarFeito(this)">✓</button>
+            </div>
+
+            <div class="day-card">
+                <div class="day-info">
+                    <h2>Terça-feira: Soltando a Voz 🗣️</h2>
+                    <span class="time-block">19:00 - 20:20 | Português (Leitura/Interpretação)</span>
+                    <span class="time-block interval-block">20:20 - 20:40 | Intervalo / Lanche 🎧</span>
+                    <span class="time-block">20:40 - 22:00 | Artes e Inglês</span>
+                    <p>Sem estresse. É só focar na interpretação de texto e garantir os pontos de Linguagens.</p>
+                </div>
+                <button class="check-btn" onclick="marcarFeito(this)">✓</button>
+            </div>
+
+            <div class="day-card">
+                <div class="day-info">
+                    <h2>Quarta-feira: A Batida dos Números 🔢</h2>
+                    <span class="time-block">19:00 - 20:20 | Matemática (Teoria/Exemplos)</span>
+                    <span class="time-block interval-block">20:20 - 20:40 | Intervalo / Lanche 🎧</span>
+                    <span class="time-block">20:40 - 22:00 | Matemática (Só Exercícios!)</span>
+                    <p>Matemática básica resolve a prova. Papel, caneta e muito treino prático.</p>
+                </div>
+                <button class="check-btn" onclick="marcarFeito(this)">✓</button>
+            </div>
+
+            <div class="day-card">
+                <div class="day-info">
+                    <h2>Quinta-feira: A Química do Som 🧬</h2>
+                    <span class="time-block">19:00 - 20:20 | Ciências (Corpo Humano e Saúde)</span>
+                    <span class="time-block interval-block">20:20 - 20:40 | Intervalo / Lanche 🎧</span>
+                    <span class="time-block">20:40 - 22:00 | Ciências (Natureza e Energia)</span>
+                    <p>Entendendo como as coisas funcionam. Muita leitura visual e mapas mentais ajudam aqui.</p>
+                </div>
+                <button class="check-btn" onclick="marcarFeito(this)">✓</button>
+            </div>
+
+            <div class="day-card">
+                <div class="day-info">
+                    <h2>Sexta-feira: O Fechamento ✍️</h2>
+                    <span class="time-block">19:00 - 20:30 | Treino de Redação</span>
+                    <span class="time-block interval-block">20:30 - 20:50 | Intervalo / Lanche 🎧</span>
+                    <span class="time-block">20:50 - 22:00 | Revisão Geral da Semana</span>
+                    <p>Sextou! Dia de escrever a redação nota mil e revisar o que aprendeu. Depois, baile liberado!</p>
+                </div>
+                <button class="check-btn" onclick="marcarFeito(this)">✓</button>
+            </div>
+
+        </div>
+
+        <footer>
+            Foco na missão! 🚀
+        </footer>
+    </div>
+
+    <script>
+        // Função para alternar o modo noturno
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Função para marcar o dia como concluído e soltar confetes!
+        function marcarFeito(botao) {
+            if (!botao.classList.contains('concluido')) {
+                botao.classList.add('concluido');
+                botao.innerHTML = '⭐';
+                
+                // Explosão de confetes ao finalizar o dia
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff007f', '#7f00ff', '#ffdd00', '#00cc66']
+                });
+            } else {
+                // Permite desmarcar se clicado novamente sem confete
+                botao.classList.remove('concluido');
+                botao.innerHTML = '✓';
+            }
+        }
+    </script>
+
+</body>
+</html>

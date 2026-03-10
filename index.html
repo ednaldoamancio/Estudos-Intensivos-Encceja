@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Aluno - edhumanas</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --primary: #ff007f; 
+            --secondary: #7f00ff; 
+            --accent: #ffdd00;
+            --success: #00cc66;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: 0.3s;
+        }
+
+        /* BARRA DE NAVEGAÇÃO SUPERIOR */
+        .navbar {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            padding: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: 0.3s;
+        }
+        .navbar a:hover { color: var(--accent); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-bottom: 4px solid var(--primary);
+        }
+
+        h1 { font-size: 2.2em; margin: 0; color: var(--primary); text-transform: uppercase; }
+        p.subtitle { font-size: 1.1em; font-weight: bold; margin-top: 10px; color: var(--text-color); }
+
+        .controls { display: flex; justify-content: center; margin-bottom: 20px; }
+        .btn-acao { background-color: #555; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.3s; }
+        .btn-acao:hover { background-color: #333; }
+
+        .section-title { margin-top: 40px; border-bottom: 2px solid var(--secondary); padding-bottom: 10px; color: var(--secondary); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            border-top: 5px solid var(--secondary);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .card h2 { margin-top: 0; color: var(--text-color); font-size: 1.4em; }
+        
+        .status-badge {
+            display: inline-block;
+            margin: 15px 0;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            background-color: #eee;
+            color: #666;
+        }
+
+        .status-badge.concluido { background-color: rgba(0, 204, 102, 0.2); color: var(--success); }
+        .card.concluido { border-top-color: var(--success); border-left: 5px solid var(--success); }
+
+        .btn-estudar { background-color: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-estudar:hover { background-color: var(--primary); }
+        
+        .btn-limpar { background-color: transparent; color: #888; border: 1px underline #888; font-size: 0.9em; margin-top: 50px; cursor: pointer; padding: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html">🏠 Início</a>
+        <a href="cronograma.html">📅 Rotina</a>
+        <a href="humanas.html">📜 Humanas</a>
+    </nav>
+
+    <div class="container">
+        <div class="controls">
+            <button class="btn-acao" onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <header>
+            <h1>Rumo à Vitória!</h1>
+            <p class="subtitle">Estudos Intensivos Encceja - Foco total, Híngrid! 🎓</p>
+        </header>
+
+        <h2 class="section-title">📚 Trilhas de Estudo</h2>
+        <div class="grid">
+            <div class="card" id="card-geo1">
+                <div>
+                    <h2>🌍 Geografia</h2>
+                    <p>A Cidade e o Campo: Urbanização e Segregação.</p>
+                </div>
+                <div>
+                    <div class="status-badge" id="badge-geo1">⏳ Pendente</div>
+                    <button class="btn-estudar" onclick="window.location.href='resumo_geografia_1.html'">Acessar Material</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-hist1">
+                <div>
+                    <h2>⏳ História</h2>
+                    <p>A Base da Exploração: Açúcar, Ouro e Escravidão.</p>
+                </div>
+                <div>
+                    <div class="status-badge" id="badge-hist1">⏳ Pendente</div>
+                    <button class="btn-estudar" onclick="window.location.href='resumo_historia_1.html'">Acessar Material</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-ling1">
+                <div>
+                    <h2>🗣️ Linguagens</h2>
+                    <p>A Arte de Interpretar e Hackear Textos.</p>
+                </div>
+                <div>
+                    <div class="status-badge" id="badge-ling1">⏳ Pendente</div>
+                    <button class="btn-estudar" onclick="window.location.href='resumo_linguagens_1.html'">Acessar Material</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-mat1">
+                <div>
+                    <h2>🔢 Matemática</h2>
+                    <p>Descomplicando Porcentagem e Regra de Três.</p>
+                </div>
+                <div>
+                    <div class="status-badge" id="badge-mat1">⏳ Pendente</div>
+                    <button class="btn-estudar" onclick="window.location.href='resumo_matematica_1.html'">Acessar Material</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-limpar" onclick="limparProgresso()">🔄 Zerar Meu Progresso do Dispositivo</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            carregarProgressoModulo('geo1', 'card-geo1', 'badge-geo1');
+            carregarProgressoModulo('hist1', 'card-hist1', 'badge-hist1');
+            carregarProgressoModulo('ling1', 'card-ling1', 'badge-ling1');
+            carregarProgressoModulo('mat1', 'card-mat1', 'badge-mat1'); // Matemática adicionada aqui!
+        };
+
+        function carregarProgressoModulo(idModulo, idCard, idBadge) {
+            let status = localStorage.getItem('edhumanas_status_' + idModulo);
+            let nota = localStorage.getItem('edhumanas_nota_' + idModulo);
+
+            if (status === 'concluido') {
+                document.getElementById(idCard).classList.add('concluido');
+                document.getElementById(idBadge).classList.add('concluido');
+                let notaFinal = parseFloat(nota).toFixed(1);
+                document.getElementById(idBadge).innerHTML = '✅ Concluído | Maior Nota: ' + notaFinal;
+                document.querySelector('#' + idCard + ' .btn-estudar').innerHTML = '🔄 Revisar Módulo';
+            }
+        }
+
+        function limparProgresso() {
+            if(confirm("Tem certeza que deseja apagar todo o progresso?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

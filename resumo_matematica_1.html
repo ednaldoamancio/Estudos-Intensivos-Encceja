@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática: A Batida dos Números - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #00cc66; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; transition: 0.3s; line-height: 1.6; }
+        
+        /* Navbar */
+        .navbar { background: linear-gradient(135deg, var(--secondary), var(--primary)); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em; transition: 0.3s; }
+        .navbar a:hover { color: var(--accent); }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .controls { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+        
+        /* Mapa Mental */
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--accent), #00994d); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(0, 204, 102, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(0, 204, 102, 0.2); }
+        
+        /* Iframe da Khan Academy */
+        .iframe-section { margin-bottom: 30px; text-align: center; background-color: var(--card-bg); padding: 20px; border-radius: 10px; border-top: 4px solid var(--secondary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .iframe-section h2 { color: var(--secondary); margin-top: 0; margin-bottom: 10px; }
+        .iframe-wrapper { position: relative; width: 100%; height: 600px; border-radius: 8px; overflow: hidden; border: 2px solid #ddd; }
+        body.dark-mode .iframe-wrapper { border-color: #444; }
+        .iframe-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
+        .destaque { font-weight: bold; color: var(--accent); }
+        
+        /* Quiz */
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+        
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html">🏠 Início</a>
+        <a href="cronograma.html">📅 Rotina</a>
+    </nav>
+
+    <div class="container">
+        <div class="controls">
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>Porcentagem e Regra de 3 🔢📉</h1>
+            <p>Pega a visão, Híngrid: a Matemática do Encceja é a mesma que você usa no shopping e no mercado!</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: A Batida dos Números</h2>
+            <div class="node-central">As Ferramentas de Ouro</div>
+            <div class="branches">
+                <div class="branch"><strong>Porcentagem (%):</strong><br>Significa "por cem". 50% é a mesma coisa que a metade de algo. 10% é só dividir por 10.</div>
+                <div class="branch"><strong>Regra de Três:</strong><br>O truque mágico! Se você sabe três valores e precisa descobrir o quarto (o famoso X), é só cruzar e multiplicar.</div>
+                <div class="branch"><strong>Interpretação:</strong><br>O Encceja não quer te ver sofrendo com fórmulas. Eles querem saber se você sabe calcular um desconto numa vitrine.</div>
+            </div>
+        </div>
+
+        <div class="iframe-section">
+            <h2>📚 Aula Interativa: Khan Academy</h2>
+            <p style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px;">Navegue pela plataforma abaixo para compreender a introdução às porcentagens.</p>
+            <div class="iframe-wrapper">
+                <iframe src="https://pt.khanacademy.org/math/pt-mat-prep-8-ano-todo-conteudo/xa4394d52528940c7:porcentagem/xa4394d52528940c7:introducao-as-porcentagens/v/describing-the-meaning-of-percent" allowfullscreen></iframe>
+            </div>
+            <p style="font-size: 0.8em; margin-top: 10px; opacity: 0.7;">Se a página não carregar, <a href="https://pt.khanacademy.org/math/pt-mat-prep-8-ano-todo-conteudo/xa4394d52528940c7:porcentagem/xa4394d52528940c7:introducao-as-porcentagens/v/describing-the-meaning-of-percent" target="_blank" style="color: var(--secondary);">clique aqui para abrir num novo separador</a>.</p>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>Se tem um assunto que você precisa dominar para garantir o diploma, é <span class="destaque">Porcentagem</span> e <span class="destaque">Regra de Três</span>. A prova sempre vai trazer histórias do dia a dia: alguém que comprou um celular na promoção, uma receita de bolo que precisa ser dobrada, ou o rendimento da gasolina de um carro.</p>
+            <p>Dica de ouro: Leia a pergunta com calma e anote os dados que o problema te dá antes de sair fazendo conta. Organizar quem é quem (dinheiro debaixo de dinheiro, porcentagem debaixo de porcentagem) evita que você caia nas pegadinhas!</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+            
+            <div class="question-box" id="q1">
+                <p><strong>1. Você entra numa loja e vê um tênis que custava R$ 200,00 com uma placa de "50% de desconto". Isso significa que:</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. 50% não é tirar 50 reais, é tirar a metade do valor total.')">A) O tênis vai ficar 50 reais mais barato, custando R$ 150,00.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Correto! 50% é exatamente a metade. A metade de 200 é 100. Ponto garantido!')">B) Você vai pagar exatamente a metade do preço, ou seja, R$ 100,00.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Isso seria 100% de desconto (ou seja, de graça).')">C) Você não vai pagar nada, porque 50% anula o valor.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. Para fazer 2 bolos, você usa 4 ovos. Se a questão do Encceja perguntar quantos ovos você precisa para fazer 6 bolos, como a Regra de Três te ajuda?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. A proporção tem que ser igual. Se a quantidade de bolos triplicou (de 2 para 6), a de ovos também triplica.')">A) Você simplesmente soma mais dois ovos, porque é assim que a receita funciona.</button>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Exatamente! Você monta: 2 bolos = 4 ovos. 6 bolos = X ovos. É só cruzar e achar os 12 ovos. É a lógica da proporção!')">B) Ela ajuda a manter a proporção. Se a quantidade de bolos aumentou 3 vezes (de 2 para 6), os ovos também aumentam 3 vezes (4 x 3 = 12 ovos).</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. A Matemática do Encceja tem lógica, chutar é sempre a pior opção.')">C) A Regra de Três não serve pra isso, o ideal é chutar um valor aproximado.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+            
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 2;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_mat1') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_mat1', notaAtual); }
+            localStorage.setItem('edhumanas_status_mat1', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
