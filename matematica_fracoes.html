@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Treino de Frações - edhumanas</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         :root {
             --bg-color: #f4f4f9;
@@ -17,7 +20,8 @@
             --border: rgba(127, 0, 255, 0.2);
             --shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-
+        
+        /* Tema Noturno */
         body.dark-mode {
             --bg-color: #121212;
             --text-color: #e0e0e0;
@@ -46,6 +50,7 @@
         .controls { display: flex; justify-content: flex-end; margin-bottom: 20px; }
         .btn-noturna { background-color: #555; color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 20px; cursor: pointer; transition: 0.3s; }
         .btn-noturna:hover { background-color: #333; }
+        body.dark-mode .btn-noturna { background-color: var(--accent); color: #121212; }
 
         /* Header */
         header { text-align: center; padding: 20px 10px 30px; }
@@ -53,7 +58,7 @@
         header p { color: var(--text-color); font-size: 1.1em; font-weight: bold; opacity: 0.8; }
 
         /* Progress Bar */
-        .progress-section { background: var(--card-bg); border-radius: 15px; padding: 20px; box-shadow: var(--shadow); border: 2px solid var(--border); margin-bottom: 25px; }
+        .progress-section { background: var(--card-bg); border-radius: 15px; padding: 20px; box-shadow: var(--shadow); border: 2px solid var(--border); margin-bottom: 25px; transition: 0.3s; }
         .progress-label { display: flex; justify-content: space-between; font-size: 0.9em; font-weight: bold; margin-bottom: 10px; }
         .progress-track { width: 100%; height: 12px; background: rgba(127,0,255,0.1); border-radius: 10px; overflow: hidden; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.5s ease; }
@@ -179,8 +184,7 @@
 <script>
 const phases = [
   {
-    id:1,
-    title:'Pegando o Jeito', subtitle:'Nível Fácil — Frações simples (2, 4, 5 e 10)',
+    id:1, title:'Pegando o Jeito', subtitle:'Nível Fácil — Frações simples (2, 4, 5 e 10)',
     exampleTitle:'A Regra de Ouro',
     exampleContent:`
       <div class="ex-step"><div class="ex-step-num">1</div><div>Temos a fração <strong>1/2</strong>. Dividimos o de cima pelo de baixo: <strong>1 ÷ 2 = 0,5</strong></div></div>
@@ -191,12 +195,11 @@ const phases = [
       {frac:'3/4',dec:'0.75',pct:'75'},{frac:'1/5',dec:'0.2',pct:'20'},
       {frac:'2/5',dec:'0.4',pct:'40'},{frac:'3/5',dec:'0.6',pct:'60'},
       {frac:'4/5',dec:'0.8',pct:'80'},{frac:'1/10',dec:'0.1',pct:'10'},
-      {frac:'3/10',dec:'0.3',pct:'30'},{frac:'7/10',dec:'0.7',pct:'70'},
+      {frac:'3/10',dec:'0.3',pct:'30'},{frac:'7/10',dec:'0.7',pct:'70'}
     ]
   },
   {
-    id:2,
-    title:'Aumentando o Ritmo', subtitle:'Nível Médio — Arredondamentos e Atenção',
+    id:2, title:'Aumentando o Ritmo', subtitle:'Nível Médio — Arredondamentos e Atenção',
     exampleTitle:'Denominadores maiores (8 e 20)',
     exampleContent:`
       <div class="ex-step"><div class="ex-step-num">1</div><div>Temos a fração <strong>3/8</strong>. Dividindo: <strong>3 ÷ 8 = 0,375</strong></div></div>
@@ -207,12 +210,11 @@ const phases = [
       {frac:'4/10',dec:'0.4',pct:'40'},{frac:'5/10',dec:'0.5',pct:'50'},
       {frac:'1/8',dec:'0.125',pct:'12.5'},{frac:'3/8',dec:'0.375',pct:'37.5'},
       {frac:'5/8',dec:'0.625',pct:'62.5'},{frac:'1/20',dec:'0.05',pct:'5'},
-      {frac:'3/20',dec:'0.15',pct:'15'},{frac:'7/20',dec:'0.35',pct:'35'},
+      {frac:'3/20',dec:'0.15',pct:'15'},{frac:'7/20',dec:'0.35',pct:'35'}
     ]
   },
   {
-    id:3,
-    title:'Estratégia Ninja', subtitle:'Denominadores 25 e 50',
+    id:3, title:'Estratégia Ninja', subtitle:'Denominadores 25 e 50',
     exampleTitle:'O Atalho do 100',
     exampleContent:`
       <div class="ex-step"><div class="ex-step-num">1</div><div>Temos <strong>7/25</strong>. Se multiplicar por 4, o 25 vira 100. Faça isso em cima também: 7x4 = 28. Fica <strong>28/100</strong>.</div></div>
@@ -223,12 +225,11 @@ const phases = [
       {frac:'13/25',dec:'0.52',pct:'52'},{frac:'3/50',dec:'0.06',pct:'6'},
       {frac:'7/50',dec:'0.14',pct:'14'},{frac:'9/50',dec:'0.18',pct:'18'},
       {frac:'7/8',dec:'0.875',pct:'87.5'},{frac:'5/20',dec:'0.25',pct:'25'},
-      {frac:'11/20',dec:'0.55',pct:'55'},{frac:'17/20',dec:'0.85',pct:'85'},
+      {frac:'11/20',dec:'0.55',pct:'55'},{frac:'17/20',dec:'0.85',pct:'85'}
     ]
   },
   {
-    id:4,
-    title:'O Paredão', subtitle:'Nível Difícil — Frações com denominadores 16 e 40',
+    id:4, title:'O Paredão', subtitle:'Nível Difícil — Frações com denominadores 16 e 40',
     exampleTitle:'Foco na Divisão Longa',
     exampleContent:`
       <div class="ex-step"><div class="ex-step-num">1</div><div>Para <strong>17/40</strong>, a divisão dá trabalho: <strong>17 ÷ 40 = 0,425</strong></div></div>
@@ -239,12 +240,11 @@ const phases = [
       {frac:'13/50',dec:'0.26',pct:'26'},{frac:'3/16',dec:'0.1875',pct:'18.75'},
       {frac:'5/16',dec:'0.3125',pct:'31.25'},{frac:'7/16',dec:'0.4375',pct:'43.75'},
       {frac:'11/16',dec:'0.6875',pct:'68.75'},{frac:'17/40',dec:'0.425',pct:'42.5'},
-      {frac:'23/40',dec:'0.575',pct:'57.5'},{frac:'37/40',dec:'0.925',pct:'92.5'},
+      {frac:'23/40',dec:'0.575',pct:'57.5'},{frac:'37/40',dec:'0.925',pct:'92.5'}
     ]
   },
   {
-    id:5,
-    title:'O Chefe Final', subtitle:'Desafio Máximo — As frações mais elaboradas!',
+    id:5, title:'O Chefe Final', subtitle:'Desafio Máximo — As frações mais elaboradas!',
     exampleTitle:'Calma e Precisão',
     exampleContent:`
       <div class="ex-step"><div class="ex-step-num">1</div><div>Temos <strong>9/32</strong>: Dividindo temos <strong>9 ÷ 32 = 0,28125</strong>. Em porcentagem: <strong>28,125%</strong></div></div>
@@ -255,20 +255,37 @@ const phases = [
       {frac:'3/125',dec:'0.024',pct:'2.4'},{frac:'7/125',dec:'0.056',pct:'5.6'},
       {frac:'11/125',dec:'0.088',pct:'8.8'},{frac:'7/80',dec:'0.0875',pct:'8.75'},
       {frac:'13/80',dec:'0.1625',pct:'16.25'},{frac:'31/80',dec:'0.3875',pct:'38.75'},
-      {frac:'9/200',dec:'0.045',pct:'4.5'},{frac:'47/200',dec:'0.235',pct:'23.5'},
+      {frac:'9/200',dec:'0.045',pct:'4.5'},{frac:'47/200',dec:'0.235',pct:'23.5'}
     ]
   }
 ];
 
 const MAX_ATTEMPTS = 2;
-
 let state = {
   currentPhase: 1,
   unlockedPhases: [1],
   answers: {},
-  phaseCorrect: {1:0,2:0,3:0,4:0,5:0},
+  phaseCorrect: {1:0, 2:0, 3:0, 4:0, 5:0},
+  phaseDone: {1:0, 2:0, 3:0, 4:0, 5:0}, // Nova contagem: questões respondidas por fase
   totalCorrect: 0,
 };
+
+// Função mágica de confetes!
+function lançarConfetes() {
+    var duration = 3 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+    function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+    var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) { return clearInterval(interval); }
+        var particleCount = 50 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
+}
 
 function renderAll() {
   const container = document.getElementById('main-content');
@@ -298,6 +315,8 @@ function renderAll() {
 
       const card = document.createElement('div');
       card.className = `exercise-card`;
+      card.id = `card-${key}`; // CORREÇÃO: Faltava colocar o ID no card para a tremedeira funcionar!
+      
       if (saved.done) card.classList.add(saved.correct ? 'correct-final' : 'wrong-final');
 
       const dotsHtml = [0,1].map(d => {
@@ -354,19 +373,20 @@ function renderAll() {
     });
 
     const banner = document.createElement('div');
-    banner.className = `phase-complete ${state.phaseCorrect[ph.id]>=ph.exercises.length?'show':''}`;
+    // CORREÇÃO: O banner aparece se todas as questões da fase estiverem respondidas
+    banner.className = `phase-complete ${state.phaseDone[ph.id] >= ph.exercises.length ? 'show' : ''}`;
     banner.id = `banner-${ph.id}`;
     banner.innerHTML = `
       <h3>Missão da Fase Cumprida! 🚀</h3>
       <p>Você dominou todos os desafios desta etapa.</p>
-      ${ph.id<5?`<button class="action-btn" onclick="unlockNextPhase(${ph.id})">Avançar para a próxima fase</button>`:''}
+      ${ph.id < 5 ? `<button class="action-btn" onclick="unlockNextPhase(${ph.id})">Avançar para a próxima fase</button>` : ''}
     `;
     wrap.appendChild(banner);
     container.appendChild(wrap);
   });
 
   const finalBanner = document.createElement('div');
-  finalBanner.className = `final-banner ${state.totalCorrect>=50?'show':''}`;
+  finalBanner.className = `final-banner ${state.phaseDone[5] >= 10 ? 'show' : ''}`;
   finalBanner.id = 'final-banner';
   finalBanner.innerHTML = `
     <h2>Você Zerou o Jogo! 🏆</h2>
@@ -409,6 +429,8 @@ function checkAnswer(key, cDec, cPct) {
     if (dot && d < saved.attempts) dot.classList.add('used');
   }
 
+  const [phId] = key.split('-');
+
   if (allOk) {
     saved.done = true; saved.correct = true;
     decEl.className='correct-input'; pctEl.className='correct-input';
@@ -418,34 +440,24 @@ function checkAnswer(key, cDec, cPct) {
     fb.innerHTML='✔️ Pega a visão! Resposta perfeita.';
 
     state.totalCorrect++;
-    const [phId] = key.split('-');
     state.phaseCorrect[+phId]++;
-    state.answers[key] = saved;
-
-    if (state.phaseCorrect[+phId] >= phases.find(p=>p.id===+phId).exercises.length) {
-      document.getElementById(`banner-${+phId}`).classList.add('show');
-      if(+phId === 5) document.getElementById('final-banner').classList.add('show');
-    }
-    updateUI();
-
   } else if (saved.attempts >= MAX_ATTEMPTS) {
     saved.done = true; saved.correct = false;
-    state.answers[key] = saved;
-
+    
     decEl.className = okDec ? 'correct-input':'wrong-input';
     pctEl.className = okPct ? 'correct-input':'wrong-input';
     decEl.disabled=true; pctEl.disabled=true; btn.disabled=true;
     card.classList.add('wrong-final');
+    
+    // A tremedeira agora vai funcionar perfeitamente!
     card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),400);
 
     for(let d=0;d<MAX_ATTEMPTS;d++){const dot=document.getElementById(`dot-${key}-${d}`);if(dot)dot.className='attempt-dot lost';}
 
     fb.className='feedback wrong-fb show';
     fb.innerHTML=`❌ Acabaram as chances. Certo: Decimal <strong>${cDec.replace('.',',')}</strong> e <strong>${cPct}%</strong>.`;
-    updateUI();
-
   } else {
-    state.answers[key] = saved;
+    // Tenta de novo
     card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),400);
 
     if (okDec) { decEl.className='correct-input'; decEl.disabled=true; } else decEl.style.borderColor = "var(--incorrect)";
@@ -454,6 +466,32 @@ function checkAnswer(key, cDec, cPct) {
     const rem = MAX_ATTEMPTS - saved.attempts;
     fb.className='feedback warn-fb show';
     fb.innerHTML=`⚠️ Quase lá! Você ainda tem <strong>${rem} tentativa${rem>1?'s':''}</strong>. Corrija o que faltou!`;
+  }
+
+  state.answers[key] = saved;
+  updateUI();
+
+  // VERIFICAÇÃO DE CONCLUSÃO DE FASE + CONFETES
+  if (saved.done) {
+      state.phaseDone[+phId]++;
+      
+      const qtdExerciciosNestaFase = phases.find(p => p.id === +phId).exercises.length;
+      
+      if (state.phaseDone[+phId] >= qtdExerciciosNestaFase) {
+          document.getElementById(`banner-${+phId}`).classList.add('show');
+          
+          // Festa!
+          lançarConfetes();
+
+          if (+phId === 5) {
+              document.getElementById('final-banner').classList.add('show');
+          } else {
+              // Avança de fase automaticamente após 3.5 segundos de comemoração
+              setTimeout(() => {
+                  unlockNextPhase(+phId);
+              }, 3500);
+          }
+      }
   }
 }
 
@@ -466,7 +504,11 @@ function unlockNextPhase(cur) {
 function goToPhase(id) {
   if (!state.unlockedPhases.includes(id)) return;
   state.currentPhase = id;
-  phases.forEach(p=>{ const el=document.getElementById(`phase-${p.id}`); if(el) el.style.display=p.id===id?'block':'none'; });
+  
+  phases.forEach(p=>{ 
+      const el=document.getElementById(`phase-${p.id}`); 
+      if(el) el.style.display = p.id === id ? 'block' : 'none'; 
+  });
   
   document.querySelectorAll('.phase-tab').forEach(tab=>{
     const tid=+tab.dataset.phase;
@@ -474,6 +516,7 @@ function goToPhase(id) {
     if (tid===state.currentPhase) tab.classList.add('active');
     if (!state.unlockedPhases.includes(tid)) tab.classList.add('locked');
   });
+  
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
