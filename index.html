@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Aluno - edhumanas</title>
+    <title>Estudos Intensivos Encceja - edhumanas</title>
     <style>
         :root {
             --bg-color: #f4f4f9;
             --text-color: #333;
             --card-bg: #ffffff;
-            --primary: #ff007f; 
-            --secondary: #7f00ff; 
-            --accent: #ffdd00;
+            --primary: #ff007f; /* Rosa Neon */
+            --secondary: #7f00ff; /* Roxo Neon */
+            --accent: #00e5ff; /* Ciano */
             --success: #00cc66;
             --disabled: #cccccc;
         }
@@ -30,6 +30,7 @@
             margin: 0;
             padding: 0;
             transition: 0.3s;
+            scroll-behavior: smooth; /* Faz a rolagem ser suave ao clicar no menu */
         }
 
         /* BARRA DE NAVEGAÇÃO SUPERIOR */
@@ -41,12 +42,15 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
         }
         .navbar a {
             color: white;
             text-decoration: none;
             font-weight: bold;
-            margin: 0 15px;
             font-size: 1.1em;
             transition: 0.3s;
         }
@@ -56,16 +60,16 @@
 
         header {
             background-color: var(--card-bg);
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-bottom: 4px solid var(--primary);
+            border-bottom: 5px solid var(--primary);
         }
 
-        h1 { font-size: 2.2em; margin: 0; color: var(--primary); text-transform: uppercase; }
-        p.subtitle { font-size: 1.1em; font-weight: bold; margin-top: 10px; color: var(--text-color); }
+        h1 { font-size: 2.5em; margin: 0; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
+        p.subtitle { font-size: 1.2em; font-weight: bold; margin-top: 10px; color: var(--text-color); opacity: 0.9; }
 
         .controls { display: flex; justify-content: center; margin-bottom: 20px; }
         .btn-acao { background-color: #555; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.3s; }
@@ -74,11 +78,12 @@
 
         /* SEÇÕES DE DISCIPLINAS */
         .area-section {
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             background: rgba(0,0,0,0.02);
             padding: 20px;
             border-radius: 15px;
             border: 2px dashed rgba(127, 0, 255, 0.2);
+            scroll-margin-top: 80px; /* Evita que o menu fixo cubra o título ao rolar */
         }
         body.dark-mode .area-section { background: rgba(255,255,255,0.02); border-color: rgba(127, 0, 255, 0.4); }
 
@@ -94,7 +99,7 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 
-        /* Estilo dos Cartões */
+        /* ESTILO DOS CARTÕES */
         .card {
             background-color: var(--card-bg);
             padding: 25px;
@@ -127,13 +132,17 @@
         .status-badge.concluido { background-color: rgba(0, 204, 102, 0.2); color: var(--success); border: 1px solid var(--success); }
         .card.concluido { border-top-color: var(--success); border-left: 5px solid var(--success); }
 
-        .btn-estudar { background-color: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-estudar { background-color: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 1em; }
         .btn-estudar:hover { background-color: var(--primary); }
         
-        /* Botão Desativado (Para as matérias "Em Breve") */
         .btn-estudar:disabled { background-color: var(--disabled); cursor: not-allowed; color: #666; }
         
-        .btn-limpar { background-color: transparent; color: #888; border: 1px underline #888; font-size: 0.9em; margin-top: 40px; cursor: pointer; padding: 10px; width: 100%; }
+        .btn-limpar { background-color: transparent; color: var(--incorrect); border: 2px dashed var(--incorrect); border-radius: 10px; font-size: 1em; font-weight: bold; margin-top: 20px; cursor: pointer; padding: 15px; width: 100%; transition: 0.3s; }
+        .btn-limpar:hover { background-color: rgba(255, 51, 51, 0.1); }
+
+        @media (max-width: 600px) {
+            .navbar a { font-size: 0.9em; }
+        }
     </style>
 </head>
 <body>
@@ -141,20 +150,22 @@
     <nav class="navbar">
         <a href="index.html">🏠 Início</a>
         <a href="cronograma.html">📅 Rotina</a>
-        <a href="humanas.html">📜 Humanas</a>
+        <a href="index.html#humanas">📜 Humanas</a>
+        <a href="index.html#exatas">🔢 Exatas</a>
+        <a href="index.html#linguagens">🗣️ Linguagens</a>
     </nav>
 
     <div class="container">
         <div class="controls">
-            <button class="btn-acao" onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+            <button class="btn-acao" onclick="document.body.classList.toggle('dark-mode')">🌙 Modo Foco (Noturno)</button>
         </div>
 
         <header>
-            <h1>Rumo à Vitória!</h1>
-            <p class="subtitle">Estudos Intensivos Encceja - Foco total, Híngrid! 🎓</p>
+            <h1>Rumo à Vitória! 🚀</h1>
+            <p class="subtitle">Preparatório Encceja (Ensino Fundamental). Pega a visão e garante esse diploma!</p>
         </header>
 
-        <div class="area-section">
+        <div class="area-section" id="humanas">
             <h2 class="area-title">📜 Ciências Humanas</h2>
             <div class="grid">
                 <div class="card" id="card-hist1">
@@ -171,7 +182,7 @@
                 <div class="card" id="card-geo1">
                     <div>
                         <h2>🌍 Geografia</h2>
-                        <p>A Cidade e o Campo: Urbanização e Segregação.</p>
+                        <p>A Cidade e o Campo: Urbanização e Segregação Espacial.</p>
                     </div>
                     <div>
                         <div class="status-badge" id="badge-geo1">⏳ Pendente</div>
@@ -181,7 +192,7 @@
             </div>
         </div>
 
-        <div class="area-section">
+        <div class="area-section" id="exatas">
             <h2 class="area-title">🔢 Ciências Exatas</h2>
             <div class="grid">
                 <div class="card" id="card-mat1">
@@ -195,14 +206,14 @@
                     </div>
                 </div>
 
-                <div class="card" id="card-treino-fracoes">
+                <div class="card" id="card-mat-fracoes">
                     <div>
                         <h2>🎮 Treino: Frações</h2>
-                        <p>Pratique até dominar! Missões de frações e porcentagens.</p>
+                        <p>Domine a conversão de frações em porcentagens.</p>
                     </div>
                     <div>
-                        <div class="status-badge" id="badge-treino-fracoes">⏳ Pendente</div>
-                        <button class="btn-estudar" onclick="window.location.href='matematica_fracoes.html'">Acessar Treino</button>
+                        <div class="status-badge" id="badge-mat-fracoes">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='matematica_fracoes.html'">Iniciar Desafio</button>
                     </div>
                 </div>
 
@@ -241,7 +252,7 @@
             </div>
         </div>
 
-        <div class="area-section">
+        <div class="area-section" id="linguagens">
             <h2 class="area-title">🗣️ Linguagens e Códigos</h2>
             <div class="grid">
                 <div class="card" id="card-ling1">
@@ -279,7 +290,7 @@
             </div>
         </div>
 
-        <button class="btn-limpar" onclick="limparProgresso()">🔄 Zerar Meu Progresso do Dispositivo</button>
+        <button class="btn-limpar" onclick="limparProgresso()">🔄 Apagar meu histórico de notas deste dispositivo</button>
     </div>
 
     <script>
@@ -290,7 +301,7 @@
             
             // Exatas
             carregarProgressoModulo('mat1', 'card-mat1', 'badge-mat1');
-            carregarProgressoModulo('mat_treino', 'card-treino-fracoes', 'badge-treino-fracoes');
+            carregarProgressoModulo('mat_treino', 'card-mat-fracoes', 'badge-mat-fracoes');
             carregarProgressoModulo('regra3_simples', 'card-mat-r3s', 'badge-mat-r3s');
             carregarProgressoModulo('regra3_composta', 'card-mat-r3c', 'badge-mat-r3c');
             
@@ -298,21 +309,21 @@
             carregarProgressoModulo('ling1', 'card-ling1', 'badge-ling1');
         };
 
-        function carregarProgressoModulo(idModulo, idCard, idBadge) {
-            let status = localStorage.getItem('edhumanas_status_' + idModulo);
-            let nota = localStorage.getItem('edhumanas_nota_' + idModulo);
+        function carregarProgressoModulo(idChave, idCard, idBadge) {
+            let status = localStorage.getItem('edhumanas_status_' + idChave);
+            let nota = localStorage.getItem('edhumanas_nota_' + idChave);
 
             if (status === 'concluido') {
                 document.getElementById(idCard).classList.add('concluido');
                 document.getElementById(idBadge).classList.add('concluido');
                 let notaFinal = parseFloat(nota).toFixed(1);
-                document.getElementById(idBadge).innerHTML = '✅ Concluído | Maior Nota: ' + notaFinal;
+                document.getElementById(idBadge).innerHTML = '✅ Maior Nota: ' + notaFinal;
                 document.querySelector('#' + idCard + ' .btn-estudar').innerHTML = '🔄 Revisar Módulo';
             }
         }
 
         function limparProgresso() {
-            if(confirm("Tem certeza que deseja apagar todo o progresso salvo?")) {
+            if(confirm("Papo reto: tem certeza que deseja apagar todo o seu progresso de estudos e notas salvas?")) {
                 localStorage.clear();
                 location.reload();
             }
