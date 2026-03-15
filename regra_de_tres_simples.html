@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regra de 3 Simples - edhumanas</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --primary: #ff007f; 
+            --secondary: #7f00ff; 
+            --accent: #00e5ff;
+            --correct: #00cc66;
+            --incorrect: #ff3333;
+            --border: rgba(127, 0, 255, 0.2);
+            --shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --border: rgba(127, 0, 255, 0.4);
+            --shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar { background: linear-gradient(135deg, var(--secondary), var(--primary)); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em; transition: 0.3s; }
+        .navbar a:hover { color: var(--accent); }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .controls { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+        .btn-noturna { background-color: #555; color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .btn-noturna:hover { background-color: #333; }
+        body.dark-mode .btn-noturna { background-color: var(--accent); color: #121212; }
+
+        header { text-align: center; padding: 20px 10px 30px; }
+        header h1 { font-size: 2.2em; color: var(--primary); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        header p { color: var(--text-color); font-size: 1.1em; font-weight: bold; opacity: 0.8; }
+
+        .progress-section { background: var(--card-bg); border-radius: 15px; padding: 20px; box-shadow: var(--shadow); border: 2px solid var(--border); margin-bottom: 25px; transition: 0.3s; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9em; font-weight: bold; margin-bottom: 10px; }
+        .progress-track { width: 100%; height: 12px; background: rgba(127,0,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.5s ease; }
+        
+        .stats-row { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+        .stat-chip { background: rgba(127,0,255,0.05); padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.85em; }
+        body.dark-mode .stat-chip { background: rgba(255,255,255,0.05); }
+        .stat-chip .val { color: var(--secondary); font-size: 1.1em; }
+        .stat-chip.err .val { color: var(--incorrect); }
+
+        .phase-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .phase-tab { background: var(--card-bg); color: var(--text-color); border: 2px solid var(--border); padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .phase-tab.active { background: var(--secondary); color: white; border-color: var(--secondary); }
+        .phase-tab.locked { opacity: 0.4; cursor: not-allowed; }
+        .phase-tab:not(.locked):hover { transform: translateY(-2px); }
+
+        .phase-header { text-align: center; margin-bottom: 20px; }
+        .phase-badge { background-color: var(--primary); color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; text-transform: uppercase; font-size: 0.8em; display: inline-block; margin-bottom: 10px; }
+        .phase-header h2 { color: var(--text-color); margin-bottom: 5px; }
+        
+        .example-box { background: rgba(0, 229, 255, 0.05); border-left: 5px solid var(--accent); padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .ex-title { font-weight: bold; color: var(--secondary); margin-bottom: 15px; font-size: 1.1em; }
+        .ex-step { margin-bottom: 10px; display: flex; gap: 10px; }
+        .ex-step-num { background: var(--secondary); color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; flex-shrink: 0; font-size: 0.8em; }
+        .ex-highlight { background: rgba(255, 0, 127, 0.1); padding: 15px; border-radius: 5px; color: var(--primary); margin-top: 15px; font-size: 0.95em; border: 1px dashed var(--primary); }
+
+        .exercise-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 15px; box-shadow: var(--shadow); transition: 0.3s; position: relative; }
+        .exercise-card.correct-final { border-color: var(--correct); }
+        .exercise-card.wrong-final { border-color: var(--incorrect); }
+        .exercise-card.shake { animation: shake 0.4s ease; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+        .card-top { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.8em; font-weight: bold; color: var(--secondary); }
+        .attempts-indicator { display: flex; gap: 5px; }
+        .attempt-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--primary); }
+        .attempt-dot.used { background: var(--primary); }
+        .attempt-dot.lost { background: var(--incorrect); border-color: var(--incorrect); }
+
+        .question-text { font-size: 1.1em; font-weight: 600; margin-bottom: 15px; line-height: 1.5; color: var(--text-color); }
+
+        .input-row { display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
+        .input-group { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+        .input-group input { background: transparent; border: 2px solid var(--border); border-radius: 8px; color: var(--text-color); font-size: 1em; font-weight: bold; padding: 12px; outline: none; transition: 0.3s; width: 100%; }
+        .input-group input:focus { border-color: var(--primary); }
+        .input-group input:disabled { opacity: 0.6; cursor: not-allowed; }
+        .input-group input.correct-input { border-color: var(--correct); background: rgba(0, 204, 102, 0.05); }
+        .input-group input.wrong-input { border-color: var(--incorrect); background: rgba(255, 51, 51, 0.05); }
+
+        .check-btn { background: var(--secondary); color: white; border: none; border-radius: 8px; font-weight: bold; padding: 12px 30px; cursor: pointer; transition: 0.3s; font-size: 0.9em; flex-shrink: 0; }
+        .check-btn:hover { background: #5900b3; }
+        .check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 0.9em; display: none; line-height: 1.5; }
+        .feedback.show { display: block; }
+        .feedback.correct-fb { background: rgba(0, 204, 102, 0.1); color: var(--correct); border-left: 4px solid var(--correct); font-weight: bold; }
+        .feedback.wrong-fb { background: rgba(255, 51, 51, 0.1); color: var(--text-color); border-left: 4px solid var(--incorrect); }
+        .feedback.warn-fb { background: rgba(255, 221, 0, 0.1); color: #b39b00; border-left: 4px solid var(--accent); font-weight: bold; }
+        body.dark-mode .feedback.warn-fb { color: var(--accent); }
+
+        .step-by-step { background: rgba(0,0,0,0.05); padding: 10px; border-radius: 5px; margin-top: 10px; font-family: monospace; font-size: 1.1em; color: var(--secondary); }
+        body.dark-mode .step-by-step { background: rgba(255,255,255,0.05); color: var(--accent); }
+
+        .phase-complete, .final-banner { background: var(--card-bg); border: 2px solid var(--primary); border-radius: 15px; padding: 30px 20px; text-align: center; margin: 30px 0; display: none; box-shadow: var(--shadow); }
+        .phase-complete.show, .final-banner.show { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+        .phase-complete h3, .final-banner h2 { color: var(--primary); margin-bottom: 10px; }
+        .action-btn { background: var(--correct); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 1.1em; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .action-btn:hover { background: #00994d; }
+
+        @media (max-width: 480px) {
+            .input-row { flex-direction: column; }
+            .check-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="index.html">🏠 Início</a>
+    <a href="cronograma.html">📅 Rotina</a>
+</nav>
+
+<div class="container">
+    <div class="controls">
+        <button class="btn-noturna" onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+    </div>
+
+    <header>
+        <h1>Regra de 3 Simples</h1>
+        <p>A arte de descobrir o valor do "X" no dia a dia! 🚀</p>
+    </header>
+
+    <div class="progress-section">
+        <div class="progress-label">
+            <span>Missões Concluídas</span>
+            <span id="prog-text">0 de 60</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="stats-row">
+            <div class="stat-chip">✔️ Acertos: <span class="val" id="score-display">0</span></div>
+            <div class="stat-chip err">❌ Erros: <span class="val" id="errors-display">0</span></div>
+        </div>
+    </div>
+
+    <div class="phase-tabs" id="phase-tabs">
+        <button class="phase-tab active" data-phase="1" onclick="goToPhase(1)">Fase 1 (Direta)</button>
+        <button class="phase-tab locked" data-phase="2" onclick="goToPhase(2)">Fase 2 (Direta)</button>
+        <button class="phase-tab locked" data-phase="3" onclick="goToPhase(3)">Fase 3 (Inversa)</button>
+        <button class="phase-tab locked" data-phase="4" onclick="goToPhase(4)">Fase 4 (Inversa)</button>
+        <button class="phase-tab locked" data-phase="5" onclick="goToPhase(5)">O Chefe (Mista)</button>
+    </div>
+
+    <div id="main-content"></div>
+</div>
+
+<script>
+// Gerador das 60 questões com explicações pedagógicas passo a passo
+const q_fase1 = [
+    { q:"Se 2 açaís custam R$ 16, quanto custam 5 açaís?", ans:"40", exp:"2 açaís = 16<br>5 açaís = X<br>Multiplica cruzado: 2X = 16 * 5<br>2X = 80<br>X = 40" },
+    { q:"Se você gasta 10% de bateria em 30 minutos de vídeo, quantos minutos vai assistir com 20%?", ans:"60", exp:"10% = 30 min<br>20% = X min<br>10X = 30 * 20<br>10X = 600<br>X = 60" },
+    { q:"Se 3 blusinhas iguais saem por R$ 90, quanto custaria levar 4 blusinhas?", ans:"120", exp:"3 blusas = 90<br>4 blusas = X<br>3X = 90 * 4<br>3X = 360<br>X = 120" },
+    { q:"Um canal ganha 200 seguidores a cada 2 dias. Mantendo o ritmo, quantos ganha em 7 dias?", ans:"700", exp:"200 seg = 2 dias<br>X seg = 7 dias<br>2X = 200 * 7<br>2X = 1400<br>X = 700" },
+    { q:"Se 5 litros de gasolina rodam 50 km, quantos km o carro roda com 8 litros?", ans:"80", exp:"5 L = 50 km<br>8 L = X km<br>5X = 50 * 8<br>5X = 400<br>X = 80" },
+    { q:"Para fazer 2 bolos você usa 4 ovos. Quantos ovos precisa para fazer 6 bolos?", ans:"12", exp:"2 bolos = 4 ovos<br>6 bolos = X ovos<br>2X = 4 * 6<br>2X = 24<br>X = 12" },
+    { q:"Se 100g de queijo custam R$ 4, quanto custam 250g?", ans:"10", exp:"100g = 4 reais<br>250g = X reais<br>100X = 4 * 250<br>100X = 1000<br>X = 10" },
+    { q:"Em 4 horas de estudo você lê 20 páginas. Em 10 horas de estudo, quantas páginas lerá?", ans:"50", exp:"4h = 20 pag<br>10h = X pag<br>4X = 20 * 10<br>4X = 200<br>X = 50" },
+    { q:"Se 3 ingressos do cinema custam R$ 60, quanto você pagará por 8 ingressos?", ans:"160", exp:"3 ing = 60<br>8 ing = X<br>3X = 60 * 8<br>3X = 480<br>X = 160" },
+    { q:"Uma impressora imprime 15 folhas em 3 minutos. Quantas folhas imprime em 12 minutos?", ans:"60", exp:"15 fol = 3 min<br>X fol = 12 min<br>3X = 15 * 12<br>3X = 180<br>X = 60" },
+    { q:"Se 2 pacotes de figurinhas vêm com 10 figurinhas, quantos vêm em 5 pacotes?", ans:"25", exp:"2 pacotes = 10 fig<br>5 pacotes = X fig<br>2X = 10 * 5<br>2X = 50<br>X = 25" },
+    { q:"Se você junta R$ 50 em 2 semanas, quanto terá juntado em 8 semanas?", ans:"200", exp:"50 reais = 2 sem<br>X reais = 8 sem<br>2X = 50 * 8<br>2X = 400<br>X = 200" },
+    { q:"Um caminhão gasta 2 horas para fazer 100 km. Quantas horas gastará para fazer 350 km na mesma velocidade?", ans:"7", exp:"2h = 100km<br>Xh = 350km<br>100X = 2 * 350<br>100X = 700<br>X = 7" },
+    { q:"Se 4 latas de refri custam R$ 20, quanto custam 10 latas?", ans:"50", exp:"4 latas = 20<br>10 latas = X<br>4X = 20 * 10<br>4X = 200<br>X = 50" },
+    { q:"Se uma playlist toca 15 músicas em 1 hora, quantas músicas tocam em 3 horas?", ans:"45", exp:"15 mus = 1h<br>X mus = 3h<br>1X = 15 * 3<br>X = 45" }
+];
+
+const q_fase2 = [
+    { q:"Trabalhando 5 dias, você ganha R$ 300. Se trabalhar 12 dias, quanto ganha?", ans:"720", exp:"5 dias = 300<br>12 dias = X<br>5X = 300 * 12<br>5X = 3600<br>X = 720" },
+    { q:"Para pintar 2 paredes, usam-se 3 litros de tinta. Quantos litros para pintar 6 paredes?", ans:"9", exp:"2 par = 3 L<br>6 par = X L<br>2X = 3 * 6<br>2X = 18<br>X = 9" },
+    { q:"Se 1,5 kg de carne servem 4 pessoas num churrasco, quantos kg servirão 12 pessoas?", ans:"4.5", exp:"1,5 kg = 4 pes<br>X kg = 12 pes<br>4X = 1,5 * 12<br>4X = 18<br>X = 4,5 (Use ponto ou vírgula)" },
+    { q:"Em 15 minutos de caminhada rápida você queima 100 calorias. Em 45 minutos queimará quantas?", ans:"300", exp:"15 min = 100 cal<br>45 min = X cal<br>15X = 100 * 45<br>15X = 4500<br>X = 300" },
+    { q:"Uma receita pede 2 xícaras de açúcar para 5 porções. Quantas xícaras para 15 porções?", ans:"6", exp:"2 xic = 5 por<br>X xic = 15 por<br>5X = 2 * 15<br>5X = 30<br>X = 6" },
+    { q:"Se 3 metros de tecido custam R$ 45, quanto custarão 8 metros?", ans:"120", exp:"3 m = 45<br>8 m = X<br>3X = 45 * 8<br>3X = 360<br>X = 120" },
+    { q:"Um torneira gotejando desperdiça 2 litros de água em 3 horas. Quantos litros em 15 horas?", ans:"10", exp:"2 L = 3h<br>X L = 15h<br>3X = 2 * 15<br>3X = 30<br>X = 10" },
+    { q:"Se 8 operários montam 40 peças, quantos operários montam 100 peças no mesmo tempo?", ans:"20", exp:"8 op = 40 peç<br>X op = 100 peç<br>40X = 8 * 100<br>40X = 800<br>X = 20" },
+    { q:"Uma assinatura rende 5 pontos a cada 2 meses. Quantos pontos rende em 10 meses?", ans:"25", exp:"5 pt = 2 mes<br>X pt = 10 mes<br>2X = 5 * 10<br>2X = 50<br>X = 25" },
+    { q:"Se 4 canetas pesam 60 gramas, qual o peso de 10 canetas?", ans:"150", exp:"4 can = 60g<br>10 can = X g<br>4X = 60 * 10<br>4X = 600<br>X = 150" },
+    { q:"Com R$ 12 você compra 4 pães de queijo. Com R$ 30 compra quantos?", ans:"10", exp:"12 reais = 4 paes<br>30 reais = X paes<br>12X = 4 * 30<br>12X = 120<br>X = 10" },
+    { q:"Se 150 ml de suco concentrado fazem 1 litro de suco. Quantos ml para fazer 3 litros?", ans:"450", exp:"150 ml = 1 L<br>X ml = 3 L<br>1X = 150 * 3<br>X = 450" },
+    { q:"O aluguel de 2 mesas é R$ 18. O aluguel de 7 mesas é?", ans:"63", exp:"2 mesas = 18<br>7 mesas = X<br>2X = 18 * 7<br>2X = 126<br>X = 63" },
+    { q:"Um download baixa 50 MB em 2 segundos. Quantos MB baixa em 10 segundos?", ans:"250", exp:"50 MB = 2 s<br>X MB = 10 s<br>2X = 50 * 10<br>2X = 500<br>X = 250" },
+    { q:"Se 6 caixas pesam 30 kg, 15 caixas vão pesar quantos kg?", ans:"75", exp:"6 cax = 30 kg<br>15 cax = X kg<br>6X = 30 * 15<br>6X = 450<br>X = 75" }
+];
+
+const q_fase3 = [
+    { q:"Se 2 amigas limpam o salão em 6 horas, 3 amigas limparão em quantas horas?", ans:"4", exp:"INVERSA (Mais amigas = MENOS tempo). Multiplica em linha: <br>2 am * 6h = 3 am * Xh<br>12 = 3X<br>X = 4" },
+    { q:"Viajando a 60 km/h você chega em 4 horas. Se for a 80 km/h, chega em quantas horas?", ans:"3", exp:"INVERSA (Mais rápido = MENOS tempo).<br>60 * 4 = 80 * X<br>240 = 80X<br>X = 3" },
+    { q:"4 pedreiros constroem o muro em 15 dias. Quantos dias 6 pedreiros levariam?", ans:"10", exp:"INVERSA.<br>4 * 15 = 6 * X<br>60 = 6X<br>X = 10" },
+    { q:"A ração dura 12 dias para 3 cachorros. Se você adotar mais 1 cachorro (ficando com 4), vai durar quantos dias?", ans:"9", exp:"INVERSA.<br>3 cães * 12 dias = 4 cães * X dias<br>36 = 4X<br>X = 9" },
+    { q:"Uma fábrica com 5 máquinas produz o pedido em 8 dias. Com 10 máquinas produz em quantos dias?", ans:"4", exp:"INVERSA.<br>5 * 8 = 10 * X<br>40 = 10X<br>X = 4" },
+    { q:"Se 10 torneiras enchem a piscina em 2 horas, 5 torneiras iguais enchem em quantas horas?", ans:"4", exp:"INVERSA.<br>10 * 2 = 5 * X<br>20 = 5X<br>X = 4" },
+    { q:"Um caminhão a 50 km/h leva 6 horas para entregar. A 100 km/h vai levar quantas horas?", ans:"3", exp:"INVERSA.<br>50 * 6 = 100 * X<br>300 = 100X<br>X = 3" },
+    { q:"A pizza foi cortada em 12 pedaços para 4 pessoas. Se fossem 6 pessoas, quantos pedaços cada um comeria (divisão igual)?", ans:"2", exp:"INVERSA. Mais pessoas = menos pedaços por pessoa.<br>4 pes * 3 pedaços (cada) = 12 total. Opa, a pizza tem 12 pedaços. 12 / 6 pessoas = 2 pedaços por pessoa." },
+    { q:"O acampamento tem comida para 20 jovens por 6 dias. Se aparecerem 30 jovens, a comida dura quantos dias?", ans:"4", exp:"INVERSA.<br>20 jov * 6 dias = 30 jov * X dias<br>120 = 30X<br>X = 4" },
+    { q:"Se 4 pintores pintam a escola em 10 dias, 8 pintores levariam quantos dias?", ans:"5", exp:"INVERSA.<br>4 * 10 = 8 * X<br>40 = 8X<br>X = 5" }
+];
+
+const q_fase4 = [
+    { q:"Uma viagem de Uber a 40 km/h demora 30 minutos. Se não tiver trânsito e ele for a 60 km/h, demora quantos minutos?", ans:"20", exp:"INVERSA.<br>40 * 30 = 60 * X<br>1200 = 60X<br>X = 20" },
+    { q:"3 costureiras entregam as camisas em 12 dias. 4 costureiras entregariam em quantos dias?", ans:"9", exp:"INVERSA.<br>3 * 12 = 4 * X<br>36 = 4X<br>X = 9" },
+    { q:"A internet baixa o jogo em 40 minutos a 10 Mbps. A 50 Mbps vai baixar em quantos minutos?", ans:"8", exp:"INVERSA (Mais banda = menos tempo).<br>10 * 40 = 50 * X<br>400 = 50X<br>X = 8" },
+    { q:"Se o dinheiro paga 15 dias de hotel a R$ 80 a diária. Se você achar um hotel de R$ 120 a diária, o dinheiro vai dar para quantos dias?", ans:"10", exp:"INVERSA. (Mais cara a diária = menos dias).<br>15 * 80 = X * 120<br>1200 = 120X<br>X = 10" },
+    { q:"Para encher os balões, 6 amigos levam 2 horas. 4 amigos levariam quantas horas?", ans:"3", exp:"INVERSA.<br>6 * 2 = 4 * X<br>12 = 4X<br>X = 3" },
+    { q:"Lendo 10 páginas por dia, você acaba o livro em 18 dias. Lendo 15 páginas por dia, acaba em quantos dias?", ans:"12", exp:"INVERSA.<br>10 * 18 = 15 * X<br>180 = 15X<br>X = 12" },
+    { q:"Com passos de 60 cm, dou 1000 passos para chegar na escola. Se der passos de 75 cm, quantos passos eu dou?", ans:"800", exp:"INVERSA. Passos maiores = menos quantidade.<br>60 * 1000 = 75 * X<br>60000 = 75X<br>X = 800" },
+    { q:"Uma impressora imprime o lote em 60 min se fizer 10 folhas/min. Se fizer 15 folhas/min, o lote sai em quantos minutos?", ans:"40", exp:"INVERSA.<br>60 * 10 = X * 15<br>600 = 15X<br>X = 40" },
+    { q:"6 caminhões fazem a mudança em 4 viagens cada. Se tivessem apenas 3 caminhões, quantas viagens cada um teria que fazer?", ans:"8", exp:"INVERSA.<br>6 * 4 = 3 * X<br>24 = 3X<br>X = 8" },
+    { q:"A caixa d'água esvazia em 12 horas com 2 vazamentos iguais. Com 3 vazamentos, esvaziaria em quantas horas?", ans:"8", exp:"INVERSA. (Mais furos = menos tempo até secar).<br>12 * 2 = X * 3<br>24 = 3X<br>X = 8" }
+];
+
+const q_fase5 = [
+    { q:"Se 4 cadernos custam R$ 20, 10 cadernos custam quanto? (Pense: é direta ou inversa?)", ans:"50", exp:"DIRETA. Mais cadernos = Mais dinheiro. Multiplica em X.<br>4X = 20 * 10 -> 4X = 200 -> X = 50" },
+    { q:"Se 4 pedreiros fazem a obra em 20 dias, 8 pedreiros fazem em quantos dias?", ans:"10", exp:"INVERSA. Mais pedreiros = Menos tempo. Multiplica reto.<br>4 * 20 = 8 * X -> 80 = 8X -> X = 10" },
+    { q:"Um carro a 90 km/h faz a viagem em 4 horas. A 60 km/h ele faz em quantas horas?", ans:"6", exp:"INVERSA. Menos velocidade = Mais tempo. Multiplica reto.<br>90 * 4 = 60 * X -> 360 = 60X -> X = 6" },
+    { q:"Com R$ 150 eu compro 5 camisas. Com R$ 240 eu compro quantas camisas?", ans:"8", exp:"DIRETA. Mais dinheiro = Mais camisas. Multiplica em X.<br>150X = 5 * 240 -> 150X = 1200 -> X = 8" },
+    { q:"A ração alimenta 10 bois por 15 dias. Alimentaria 30 bois por quantos dias?", ans:"5", exp:"INVERSA. Mais bois = A ração acaba mais rápido. Multiplica reto.<br>10 * 15 = 30 * X -> 150 = 30X -> X = 5" },
+    { q:"Uma fábrica produz 500 peças em 5 horas. Em 8 horas, produz quantas peças?", ans:"800", exp:"DIRETA. Mais horas = Mais produção. Multiplica em X.<br>5X = 500 * 8 -> 5X = 4000 -> X = 800" },
+    { q:"Lendo 20 páginas/hora eu acabo em 6 horas. Lendo 30 páginas/hora eu acabo em quantas horas?", ans:"4", exp:"INVERSA. Lendo mais rápido = Acaba em menos tempo.<br>20 * 6 = 30 * X -> 120 = 30X -> X = 4" },
+    { q:"Se 3 kg de carne alimentam 8 pessoas, 6 kg de carne alimentam quantas pessoas?", ans:"16", exp:"DIRETA. Mais carne = Mais pessoas alimentadas.<br>3X = 8 * 6 -> 3X = 48 -> X = 16" },
+    { q:"Três mangueiras enchem a piscina em 10 horas. Cinco mangueiras encheriam em quantas horas?", ans:"6", exp:"INVERSA. Mais mangueiras = Menos tempo.<br>3 * 10 = 5 * X -> 30 = 5X -> X = 6" },
+    { q:"Você gasta 30 min para ir de bike a 12 km/h. A 18 km/h, você gastará quantos minutos?", ans:"20", exp:"INVERSA. Maior velocidade = Menos tempo.<br>12 * 30 = 18 * X -> 360 = 18X -> X = 20" }
+];
+
+const phases = [
+  { id:1, title:'Pegando o Jeito', subtitle:'Fase 1: Regra de Três Direta (Básica)',
+    exampleTitle:'Grandezas Diretamente Proporcionais',
+    exampleContent:`
+      <div class="ex-highlight">💡 <strong>Pega a visão:</strong> Se uma coisa aumenta, a outra aumenta junto! (Ex: Se comprar mais blusinhas, vai pagar mais caro).</div>
+      <div class="ex-step"><div class="ex-step-num">1</div><div><strong>Monte a tabela:</strong><br>2 blusinhas --- R$ 50<br>3 blusinhas --- R$ X</div></div>
+      
+      <div class="ex-step"><div class="ex-step-num">2</div><div><strong>Multiplica em "X" (cruzado):</strong><br>2 vezes X = 50 vezes 3</div></div>
+      <div class="ex-step"><div class="ex-step-num">3</div><div><strong>Resolve a equação:</strong><br>2X = 150 <br> X = 150 / 2 <br> <strong>X = 75 reais!</strong></div></div>`,
+    exercises: q_fase1
+  },
+  { id:2, title:'Aumentando o Ritmo', subtitle:'Fase 2: Direta no Cotidiano',
+    exampleTitle:'Atenção na Interpretação',
+    exampleContent:`
+      <div class="ex-highlight">A regra é a mesma: cresceu de um lado, cresceu do outro. Multiplica cruzado!</div>
+      <div class="ex-step"><div class="ex-step-num">!</div><div>Sempre anote quem é quem. Dinheiro embaixo de dinheiro, kg embaixo de kg. Não misture as colunas!</div></div>`,
+    exercises: q_fase2
+  },
+  { id:3, title:'O Tombo na Mente', subtitle:'Fase 3: Regra de Três Inversa',
+    exampleTitle:'Grandezas Inversamente Proporcionais',
+    exampleContent:`
+      <div class="ex-highlight">⚠️ <strong>Atenção máxima:</strong> Se uma coisa aumenta, a outra DIMINUI! (Ex: Se tem mais pessoas limpando, o tempo de limpeza diminui).</div>
+      <div class="ex-step"><div class="ex-step-num">1</div><div><strong>Monte a tabela:</strong><br>2 pessoas --- 6 horas<br>3 pessoas --- X horas</div></div>
+      
+      <div class="ex-step"><div class="ex-step-num">2</div><div><strong>NÃO multiplique em X! Multiplique RETO (em linha):</strong><br>2 vezes 6 = 3 vezes X</div></div>
+      <div class="ex-step"><div class="ex-step-num">3</div><div><strong>Resolve:</strong><br>12 = 3X <br> X = 12 / 3 <br> <strong>X = 4 horas!</strong></div></div>`,
+    exercises: q_fase3
+  },
+  { id:4, title:'O Paredão', subtitle:'Fase 4: Inversa com Desafios',
+    exampleTitle:'Foco na Lógica',
+    exampleContent:`
+      <div class="ex-highlight">Pergunte a si mesma antes de calcular: "Se eu aumentar a velocidade, o tempo gasto sobe ou desce?" Se descer, é INVERSA! Multiplica em linha reta.</div>`,
+    exercises: q_fase4
+  },
+  { id:5, title:'O Chefe Final', subtitle:'Fase 5: Mista (Direta ou Inversa?)',
+    exampleTitle:'O Teste Real',
+    exampleContent:`
+      <div class="ex-highlight">A prova não vai te avisar qual é qual. Leia com calma!</div>
+      <div class="ex-step"><div class="ex-step-num">?</div><div>Mais do item A gera mais do item B? Multiplica CRUZADO.</div></div>
+      <div class="ex-step"><div class="ex-step-num">?</div><div>Mais do item A gera menos do item B? Multiplica RETO.</div></div>`,
+    exercises: q_fase5
+  }
+];
+
+const MAX_ATTEMPTS = 2;
+let state = {
+  currentPhase: 1, unlockedPhases: [1], answers: {},
+  phaseCorrect: {1:0, 2:0, 3:0, 4:0, 5:0}, phaseDone: {1:0, 2:0, 3:0, 4:0, 5:0}, totalCorrect: 0,
+};
+
+// Função mágica de confetes!
+function lançarConfetes() {
+    var duration = 3 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+    function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+    var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) { return clearInterval(interval); }
+        var particleCount = 50 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
+}
+
+function renderAll() {
+  const container = document.getElementById('main-content');
+  container.innerHTML = '';
+
+  phases.forEach(ph => {
+    const wrap = document.createElement('div');
+    wrap.id = `phase-${ph.id}`;
+    wrap.style.display = ph.id === state.currentPhase ? 'block' : 'none';
+
+    wrap.innerHTML = `
+      <div class="phase-header">
+        <div class="phase-badge">${ph.title}</div>
+        <h2>${ph.subtitle}</h2>
+      </div>
+      <div class="example-box">
+        <div class="ex-title">📌 ${ph.exampleTitle}</div>
+        ${ph.exampleContent}
+      </div>
+    `;
+
+    ph.exercises.forEach((ex, i) => {
+      const key = `${ph.id}-${i}`;
+      const saved = state.answers[key] || {attempts:0, done:false};
+      const globalNum = i + 1; // Para listar de 1 a 15 na fase
+
+      const card = document.createElement('div');
+      card.className = `exercise-card`;
+      card.id = `card-${key}`;
+      
+      if (saved.done) card.classList.add(saved.correct ? 'correct-final' : 'wrong-final');
+
+      const dotsHtml = [0,1].map(d => {
+        let cls = '';
+        if (saved.done && !saved.correct) cls = 'lost';
+        else if (d < (saved.attempts||0)) cls = 'used';
+        return `<div class="attempt-dot ${cls}" id="dot-${key}-${d}"></div>`;
+      }).join('');
+
+      const dis = saved.done ? 'disabled' : '';
+      const inputCls = saved.done ? (saved.correct ? 'correct-input':'wrong-input') : '';
+      const inputVal = saved.val||'';
+      
+      let fbCls='', fbHtml='';
+      if (saved.done) {
+        if (saved.correct) { 
+            fbCls='correct-fb show'; fbHtml='✔️ Mandou bem! Resposta exata.'; 
+        } else { 
+            fbCls='wrong-fb show'; 
+            fbHtml=`❌ Acabaram as chances.<br><strong>Resposta: ${ex.ans.replace('.',',')}</strong><br><div class="step-by-step">💡 <strong>Como resolver:</strong><br>${ex.exp}</div>`; 
+        }
+      } else if (saved.attempts > 0) {
+        fbCls='warn-fb show';
+        fbHtml=`⚠️ Quase! Você ainda tem <strong>1 tentativa</strong>. Refaça o cálculo com calma.`;
+      }
+
+      card.innerHTML = `
+        <div class="card-top">
+          <span>DESAFIO ${globalNum}</span>
+          <div class="attempts-indicator">${dotsHtml}</div>
+        </div>
+        <div class="question-text">${ex.q}</div>
+        <div class="input-row">
+          <div class="input-group">
+            <input type="text" id="ans-${key}" placeholder="Digite sua resposta aqui..." value="${inputVal}" ${dis} class="${inputCls}" autocomplete="off">
+          </div>
+          <button class="check-btn" id="btn-${key}" onclick="checkAnswer('${key}','${ex.ans}')" ${dis}>Verificar</button>
+        </div>
+        <div class="feedback ${fbCls}" id="fb-${key}">
+          <span>${fbHtml}</span>
+        </div>
+      `;
+      wrap.appendChild(card);
+    });
+
+    const banner = document.createElement('div');
+    banner.className = `phase-complete ${state.phaseDone[ph.id] >= ph.exercises.length ? 'show' : ''}`;
+    banner.id = `banner-${ph.id}`;
+    banner.innerHTML = `
+      <h3>Missão da Fase Cumprida! 🚀</h3>
+      <p>Você enfrentou todos os desafios desta etapa.</p>
+      ${ph.id < 5 ? `<button class="action-btn" onclick="unlockNextPhase(${ph.id})">Avançar para a próxima fase</button>` : ''}
+    `;
+    wrap.appendChild(banner);
+    container.appendChild(wrap);
+  });
+
+  const finalBanner = document.createElement('div');
+  finalBanner.className = `final-banner ${state.phaseDone[5] >= phases[4].exercises.length ? 'show' : ''}`;
+  finalBanner.id = 'final-banner';
+  finalBanner.innerHTML = `
+    <h2>Você Zerou o Treino! 🏆</h2>
+    <p>Incrível, Híngrid! 60 desafios de Regra de Três superados. O Encceja não é páreo para você.</p>
+    <button class="action-btn" style="background:var(--primary);" onclick="salvarNotaFinal()">Salvar Progresso e Voltar</button>
+  `;
+  container.appendChild(finalBanner);
+  updateUI();
+}
+
+function norm(s){ return s.trim().replace(',','.').trim(); }
+
+function checkAnswer(key, cAns) {
+  let saved = state.answers[key] || {attempts:0, done:false, val:''};
+  if (saved.done) return;
+
+  const ansEl = document.getElementById(`ans-${key}`);
+  const btn   = document.getElementById(`btn-${key}`);
+  const fb    = document.getElementById(`fb-${key}`);
+  const card  = document.getElementById(`card-${key}`);
+
+  const uAns = parseFloat(norm(ansEl.value));
+  const rAns = parseFloat(cAns);
+  const isOk = !isNaN(uAns) && Math.abs(uAns - rAns) < 0.01;
+
+  saved.attempts++;
+  saved.val = ansEl.value;
+
+  for (let d=0;d<MAX_ATTEMPTS;d++) {
+    const dot = document.getElementById(`dot-${key}-${d}`);
+    if (dot && d < saved.attempts) dot.classList.add('used');
+  }
+
+  const [phId, exIdx] = key.split('-');
+  const ex = phases.find(p=>p.id===+phId).exercises[+exIdx];
+
+  if (isOk) {
+    saved.done = true; saved.correct = true;
+    ansEl.className='correct-input'; ansEl.disabled=true; btn.disabled=true;
+    card.classList.add('correct-final');
+    fb.className='feedback correct-fb show';
+    fb.innerHTML='✔️ Pega a visão! Resposta perfeita.';
+
+    state.totalCorrect++;
+    state.phaseCorrect[+phId]++;
+  } else if (saved.attempts >= MAX_ATTEMPTS) {
+    saved.done = true; saved.correct = false;
+    ansEl.className='wrong-input'; ansEl.disabled=true; btn.disabled=true;
+    card.classList.add('wrong-final');
+    card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),400);
+
+    for(let d=0;d<MAX_ATTEMPTS;d++){const dot=document.getElementById(`dot-${key}-${d}`);if(dot)dot.className='attempt-dot lost';}
+
+    fb.className='feedback wrong-fb show';
+    fb.innerHTML=`❌ Acabaram as chances.<br><strong>A resposta era: ${cAns.replace('.',',')}</strong><br><div class="step-by-step">💡 <strong>Como resolver:</strong><br>${ex.exp}</div>`;
+  } else {
+    card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),400);
+    ansEl.style.borderColor = "var(--incorrect)";
+    fb.className='feedback warn-fb show';
+    fb.innerHTML=`⚠️ Quase lá! Você ainda tem <strong>1 tentativa</strong>. Se errar, a explicação vai aparecer!`;
+  }
+
+  state.answers[key] = saved;
+  updateUI();
+
+  if (saved.done) {
+      state.phaseDone[+phId]++;
+      const qtdFase = phases.find(p => p.id === +phId).exercises.length;
+      if (state.phaseDone[+phId] >= qtdFase) {
+          document.getElementById(`banner-${+phId}`).classList.add('show');
+          lançarConfetes();
+          if (+phId === 5) {
+              document.getElementById('final-banner').classList.add('show');
+          } else {
+              setTimeout(() => { unlockNextPhase(+phId); }, 3500);
+          }
+      }
+  }
+}
+
+function unlockNextPhase(cur) {
+  const next = cur+1;
+  if (!state.unlockedPhases.includes(next)) state.unlockedPhases.push(next);
+  goToPhase(next);
+}
+
+function goToPhase(id) {
+  if (!state.unlockedPhases.includes(id)) return;
+  state.currentPhase = id;
+  phases.forEach(p=>{ const el=document.getElementById(`phase-${p.id}`); if(el) el.style.display = p.id === id ? 'block' : 'none'; });
+  document.querySelectorAll('.phase-tab').forEach(tab=>{
+    const tid=+tab.dataset.phase;
+    tab.classList.remove('active','locked');
+    if (tid===state.currentPhase) tab.classList.add('active');
+    if (!state.unlockedPhases.includes(tid)) tab.classList.add('locked');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateUI() {
+  const answered = Object.values(state.answers).filter(a=>a.done).length;
+  document.getElementById('prog-text').textContent = `${answered} de 60`;
+  document.getElementById('progress-fill').style.width = `${(answered/60)*100}%`;
+  document.getElementById('score-display').textContent = state.totalCorrect;
+  document.getElementById('errors-display').textContent = answered - state.totalCorrect;
+}
+
+function salvarNotaFinal() {
+    let notaTreino = (state.totalCorrect / 60) * 10;
+    let notaAntiga = localStorage.getItem('edhumanas_nota_regra3_simples') || 0;
+    if (notaTreino > notaAntiga) { localStorage.setItem('edhumanas_nota_regra3_simples', notaTreino); }
+    localStorage.setItem('edhumanas_status_regra3_simples', 'concluido');
+    alert('Desafio Concluído! Você acertou ' + state.totalCorrect + ' de 60. Sua nota (' + notaTreino.toFixed(1) + ') foi salva!');
+    window.location.href = 'index.html';
+}
+
+renderAll();
+</script>
+</body>
+</html>

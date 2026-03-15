@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciências: Corpo Humano e Saúde - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #009688; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--accent), #00695c); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(0, 150, 136, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(0, 150, 136, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
+        .destaque { font-weight: bold; color: var(--accent); }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>A Máquina Humana 🧬💪</h1>
+            <p>Bora entender como seu corpo funciona, Híngrid! Essa matéria é sobre VOCÊ.</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: Corpo Humano e Saúde</h2>
+            <div class="node-central">Como a Máquina Funciona</div>
+            <div class="branches">
+                <div class="branch"><strong>Sistemas do Corpo:</strong><br>Digestório (comida vira energia), Respiratório (oxigênio pro sangue), Circulatório (sangue leva tudo pro corpo todo).</div>
+                <div class="branch"><strong>Defesa do Corpo:</strong><br>Sistema Imunológico: seus soldados internos. Vacina treina o exército antes da guerra chegar.</div>
+                <div class="branch"><strong>Saúde Pública:</strong><br>Saneamento básico, água tratada e vacinação são os pilares pra evitar epidemias.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>Seu corpo é tipo uma cidade inteira funcionando ao mesmo tempo. O <span class="destaque">sistema digestório</span> é a usina de energia: transforma a comida em nutrientes. O <span class="destaque">sistema respiratório</span> puxa o oxigênio do ar e joga fora o gás carbônico. E o <span class="destaque">sistema circulatório</span> é o Uber do corpo: o sangue leva oxigênio e nutrientes pra todas as células e ainda recolhe o lixo.</p>
+            <p>Agora, o mais importante pra prova: <span class="destaque">vacinação</span>. A vacina é tipo um simulado pro seu sistema imunológico. Ela coloca um pedacinho enfraquecido do vírus no corpo pra ele aprender a se defender ANTES de pegar a doença de verdade. Por isso o SUS faz campanhas de vacinação: é mais barato prevenir do que tratar. E saneamento básico (água tratada, esgoto) evita doenças como dengue, cólera e leptospirose.</p>
+        </div>
+
+        <div class="card">
+            <h2>Fique Ligado: DSTs e Prevenção 🛡️</h2>
+            <p>A prova adora cobrar sobre <span class="destaque">Infecções Sexualmente Transmissíveis (ISTs)</span>. HIV/AIDS, sífilis e HPV são as mais cobradas. O método mais eficaz de prevenção é a <span class="destaque">camisinha</span> (masculina ou feminina), que protege contra ISTs e gravidez ao mesmo tempo. Não caia na pegadinha: anticoncepcional previne gravidez, mas NÃO previne ISTs.</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. Qual é a principal função da vacinação no organismo humano?</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. A vacina não cura doença, ela PREVINE. Ela age antes da doença aparecer.')">A) Curar doenças que a pessoa já contraiu.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Isso aí! A vacina ensina o corpo a se defender antes da doença chegar. É tipo um treino militar pro sistema imunológico.')">B) Estimular o sistema imunológico a produzir defesas contra doenças específicas.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. A vacina não mata vírus diretamente. Ela prepara o corpo pra ele mesmo fazer esse trabalho.')">C) Matar todos os vírus e bactérias presentes no corpo.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. Uma campanha do Ministério da Saúde diz: "Use camisinha. Previna-se." Por que a camisinha é considerada o método mais completo de prevenção?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. A pílula previne gravidez, mas não protege contra ISTs como HIV e sífilis.')">A) Porque é a mesma coisa que tomar pílula anticoncepcional.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. A camisinha não é 100% contra gravidez sozinha, mas é o único método que protege contra ISTs.')">B) Porque é o único método que garante 100% de proteção contra gravidez.</button>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Exatamente! A camisinha é o único método que protege contra ISTs E gravidez ao mesmo tempo. Dupla proteção!')">C) Porque é o único método que protege contra Infecções Sexualmente Transmissíveis (ISTs) e gravidez simultaneamente.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. Qual sistema do corpo humano é responsável por transportar oxigênio e nutrientes para todas as células?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. O sistema digestório transforma a comida em nutrientes, mas quem TRANSPORTA é outro.')">A) Sistema Digestório.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Mandou bem! O sangue, bombeado pelo coração, leva oxigênio e nutrientes pra cada cantinho do corpo.')">B) Sistema Circulatório.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. O respiratório cuida da troca de gases (oxigênio entra, gás carbônico sai), mas não transporta nutrientes.')">C) Sistema Respiratório.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_ciencias1') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_ciencias1', notaAtual); }
+            localStorage.setItem('edhumanas_status_ciencias1', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>

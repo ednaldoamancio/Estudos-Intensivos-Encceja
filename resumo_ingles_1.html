@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inglês: Estratégias de Leitura - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #1565c0; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--accent), #0d47a1); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(21, 101, 192, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(21, 101, 192, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
+        .destaque { font-weight: bold; color: var(--accent); }
+
+        .vocab-box { background-color: var(--card-bg); padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
+        .vocab-box h3 { color: var(--accent); margin-top: 0; }
+        .vocab-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ddd; }
+        .vocab-item:last-child { border-bottom: none; }
+        body.dark-mode .vocab-item { border-bottom-color: #444; }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>Inglês Sem Medo 🇺🇸🔓</h1>
+            <p>Relaxa, Híngrid! Você não precisa ser fluente. Precisa ser esperta na hora de ler.</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: Hackeando o Inglês</h2>
+            <div class="node-central">Estratégias de Leitura em Inglês</div>
+            <div class="branches">
+                <div class="branch"><strong>Cognatos (Amigos):</strong><br>Palavras parecidas com português: "telephone" = telefone, "important" = importante, "music" = música.</div>
+                <div class="branch"><strong>Falsos Cognatos (Traidores):</strong><br>Parecem mas NÃO são: "actually" = na verdade (não "atualmente"), "push" = empurrar (não "puxar").</div>
+                <div class="branch"><strong>Contexto é Rei:</strong><br>Não sabe uma palavra? Olhe as palavras ao redor. O contexto da frase te dá a pista.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>A prova de Inglês do Encceja não quer saber se você fala inglês. Ela quer saber se você consegue <span class="destaque">entender a ideia geral de um texto</span>. E a boa notícia: dá pra acertar MUITO usando estratégias simples.</p>
+            <p>Primeira estratégia: <span class="destaque">cognatos</span>. São palavras em inglês que parecem com português e significam a mesma coisa. "Hospital" é hospital. "Information" é informação. "Problem" é problema. Eles são seus melhores amigos na prova.</p>
+            <p>Segunda estratégia: cuidado com os <span class="destaque">falsos cognatos</span>! "Pretend" não é "pretender", é "fingir". "Library" não é "livraria", é "biblioteca". Esses são as pegadinhas clássicas.</p>
+            <p>Terceira estratégia: <span class="destaque">use o contexto</span>. Se você não sabe o que uma palavra significa, leia a frase inteira. As outras palavras vão te dar a pista. E sempre leia o título, as imagens e os nomes próprios antes — eles entregam o assunto do texto de bandeja.</p>
+        </div>
+
+        <div class="vocab-box">
+            <h3>Vocabulário de Sobrevivência na Prova</h3>
+            <div class="vocab-item"><span><strong>But</strong></span><span>Mas, porém</span></div>
+            <div class="vocab-item"><span><strong>Because</strong></span><span>Porque</span></div>
+            <div class="vocab-item"><span><strong>However</strong></span><span>Entretanto, porém</span></div>
+            <div class="vocab-item"><span><strong>Although</strong></span><span>Embora, apesar de</span></div>
+            <div class="vocab-item"><span><strong>Therefore</strong></span><span>Portanto, por isso</span></div>
+            <div class="vocab-item"><span><strong>According to</strong></span><span>De acordo com</span></div>
+            <div class="vocab-item"><span><strong>Should</strong></span><span>Deveria</span></div>
+            <div class="vocab-item"><span><strong>Must</strong></span><span>Deve (obrigação)</span></div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. Leia a frase: "The <em>library</em> is open from 8am to 6pm." A palavra "library" significa:</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Caiu na pegadinha! &quot;Library&quot; parece &quot;livraria&quot;, mas é um falso cognato. Livraria em inglês é &quot;bookstore&quot;.')">A) Livraria.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Isso aí! &quot;Library&quot; = biblioteca. Esse é um dos falsos cognatos mais famosos da prova!')">B) Biblioteca.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. &quot;Library&quot; é um lugar de livros, mas não é laboratório. Laboratório é &quot;laboratory&quot;.')">C) Laboratório.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. Leia o trecho: "Pollution is a serious <em>problem</em> in big cities. <em>However</em>, some governments are investing in clean energy." O que "however" indica nessa frase?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. &quot;However&quot; não adiciona, ele CONTRASTA. Ele mostra o outro lado da moeda.')">A) Uma adição de informação (e também).</button>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Exato! &quot;However&quot; = entretanto/porém. Ele mostra que, apesar do problema, algo positivo está acontecendo.')">B) Uma ideia contrária ou contraste (porém, entretanto).</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. &quot;However&quot; não indica causa. Quem indica causa é &quot;because&quot;.')">C) Uma causa ou motivo (porque).</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. Você encontra na prova um texto com o título "How to Save Water at Home" e uma imagem de uma torneira. Mesmo sem ler o texto, qual é o assunto provável?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. &quot;Water&quot; é água, não energia. E &quot;save&quot; aqui é economizar.')">A) Como economizar energia elétrica.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Perfeito! &quot;Save Water&quot; = economizar água. &quot;At Home&quot; = em casa. Título + imagem = assunto na bandeja!')">B) Dicas para economizar água em casa.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. O título fala de &quot;water&quot; (água) e &quot;home&quot; (casa), não de piscina.')">C) Como construir uma piscina em casa.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_ingles1') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_ingles1', notaAtual); }
+            localStorage.setItem('edhumanas_status_ingles1', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>

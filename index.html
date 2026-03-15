@@ -140,6 +140,9 @@
         .btn-limpar { background-color: transparent; color: var(--incorrect); border: 2px dashed var(--incorrect); border-radius: 10px; font-size: 1em; font-weight: bold; margin-top: 20px; cursor: pointer; padding: 15px; width: 100%; transition: 0.3s; }
         .btn-limpar:hover { background-color: rgba(255, 51, 51, 0.1); }
 
+        .tag-novo { display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; font-size: 0.7em; padding: 3px 8px; border-radius: 10px; margin-left: 5px; vertical-align: middle; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
         @media (max-width: 600px) {
             .navbar a { font-size: 0.9em; }
         }
@@ -152,6 +155,7 @@
         <a href="cronograma.html">📅 Rotina</a>
         <a href="index.html#humanas">📜 Humanas</a>
         <a href="index.html#exatas">🔢 Exatas</a>
+        <a href="index.html#ciencias">🧬 Ciências</a>
         <a href="index.html#linguagens">🗣️ Linguagens</a>
     </nav>
 
@@ -165,12 +169,13 @@
             <p class="subtitle">Preparatório Encceja (Ensino Fundamental). Pega a visão e garante esse diploma!</p>
         </header>
 
+        <!-- ========== CIÊNCIAS HUMANAS ========== -->
         <div class="area-section" id="humanas">
             <h2 class="area-title">📜 Ciências Humanas</h2>
             <div class="grid">
                 <div class="card" id="card-hist1">
                     <div>
-                        <h2>⏳ História</h2>
+                        <h2>⏳ História I</h2>
                         <p>A Base da Exploração: Açúcar, Ouro e Escravidão.</p>
                     </div>
                     <div>
@@ -179,9 +184,20 @@
                     </div>
                 </div>
 
+                <div class="card" id="card-hist2">
+                    <div>
+                        <h2>⚔️ História II <span class="tag-novo">NOVO</span></h2>
+                        <p>Da Independência à República: Vargas, Ditadura e Democracia.</p>
+                    </div>
+                    <div>
+                        <div class="status-badge" id="badge-hist2">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_historia_2.html'">Acessar Material</button>
+                    </div>
+                </div>
+
                 <div class="card" id="card-geo1">
                     <div>
-                        <h2>🌍 Geografia</h2>
+                        <h2>🌍 Geografia I</h2>
                         <p>A Cidade e o Campo: Urbanização e Segregação Espacial.</p>
                     </div>
                     <div>
@@ -189,20 +205,54 @@
                         <button class="btn-estudar" onclick="window.location.href='resumo_geografia_1.html'">Acessar Material</button>
                     </div>
                 </div>
+
+                <div class="card" id="card-geo2">
+                    <div>
+                        <h2>🌐 Geografia II <span class="tag-novo">NOVO</span></h2>
+                        <p>Globalização e Desigualdade: O Mundo Conectado (Mas Nem Tanto).</p>
+                    </div>
+                    <div>
+                        <div class="status-badge" id="badge-geo2">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_geografia_2.html'">Acessar Material</button>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- ========== CIÊNCIAS EXATAS ========== -->
         <div class="area-section" id="exatas">
-            <h2 class="area-title">🔢 Ciências Exatas</h2>
+            <h2 class="area-title">🔢 Matemática</h2>
             <div class="grid">
                 <div class="card" id="card-mat1">
                     <div>
-                        <h2>📉 Matemática (Teoria)</h2>
+                        <h2>📉 Matemática I (Teoria)</h2>
                         <p>Descomplicando Porcentagem e Regra de Três.</p>
                     </div>
                     <div>
                         <div class="status-badge" id="badge-mat1">⏳ Pendente</div>
                         <button class="btn-estudar" onclick="window.location.href='resumo_matematica_1.html'">Acessar Material</button>
+                    </div>
+                </div>
+
+                <div class="card" id="card-mat2">
+                    <div>
+                        <h2>📐 Geometria Básica <span class="tag-novo">NOVO</span></h2>
+                        <p>Perímetro, Área e Volume: medindo o mundo real.</p>
+                    </div>
+                    <div>
+                        <div class="status-badge" id="badge-mat2">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_matematica_2.html'">Acessar Material</button>
+                    </div>
+                </div>
+
+                <div class="card" id="card-mat3">
+                    <div>
+                        <h2>📊 Gráficos e Tabelas <span class="tag-novo">NOVO</span></h2>
+                        <p>Leitura de dados, média aritmética e interpretação visual.</p>
+                    </div>
+                    <div>
+                        <div class="status-badge" id="badge-mat3">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_matematica_3.html'">Acessar Material</button>
                     </div>
                 </div>
 
@@ -238,26 +288,55 @@
                         <button class="btn-estudar" onclick="window.location.href='regra_de_tres_composta.html'">Iniciar Desafio</button>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="card" id="card-ciencias" style="opacity: 0.8;">
+        <!-- ========== CIÊNCIAS DA NATUREZA ========== -->
+        <div class="area-section" id="ciencias">
+            <h2 class="area-title">🧬 Ciências da Natureza</h2>
+            <div class="grid">
+                <div class="card" id="card-ciencias1">
                     <div>
-                        <h2>🧬 Ciências da Natureza</h2>
-                        <p>Corpo humano, energia e meio ambiente.</p>
+                        <h2>💪 Corpo Humano e Saúde <span class="tag-novo">NOVO</span></h2>
+                        <p>Sistemas do corpo, vacinação, ISTs e saúde pública.</p>
                     </div>
                     <div>
-                        <div class="status-badge">🚧 Em Produção</div>
-                        <button class="btn-estudar" disabled>Em Breve</button>
+                        <div class="status-badge" id="badge-ciencias1">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_ciencias_1.html'">Acessar Material</button>
+                    </div>
+                </div>
+
+                <div class="card" id="card-ciencias2">
+                    <div>
+                        <h2>🌿 Ecologia e Meio Ambiente <span class="tag-novo">NOVO</span></h2>
+                        <p>Cadeia alimentar, poluição, reciclagem e aquecimento global.</p>
+                    </div>
+                    <div>
+                        <div class="status-badge" id="badge-ciencias2">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_ciencias_2.html'">Acessar Material</button>
+                    </div>
+                </div>
+
+                <div class="card" id="card-ciencias3">
+                    <div>
+                        <h2>⚡ Energia e Transformações <span class="tag-novo">NOVO</span></h2>
+                        <p>Estados da matéria, tipos de energia e fontes renováveis.</p>
+                    </div>
+                    <div>
+                        <div class="status-badge" id="badge-ciencias3">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_ciencias_3.html'">Acessar Material</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- ========== LINGUAGENS E CÓDIGOS ========== -->
         <div class="area-section" id="linguagens">
             <h2 class="area-title">🗣️ Linguagens e Códigos</h2>
             <div class="grid">
                 <div class="card" id="card-ling1">
                     <div>
-                        <h2>📚 Língua Portuguesa</h2>
+                        <h2>📚 Língua Portuguesa I</h2>
                         <p>A Arte de Interpretar e Hackear Textos.</p>
                     </div>
                     <div>
@@ -266,25 +345,36 @@
                     </div>
                 </div>
 
-                <div class="card" id="card-ingles" style="opacity: 0.8;">
+                <div class="card" id="card-ling2">
                     <div>
-                        <h2>🇺🇸 Inglês</h2>
-                        <p>Estratégias de leitura de textos estrangeiros.</p>
+                        <h2>✍️ Gêneros Textuais e Redação <span class="tag-novo">NOVO</span></h2>
+                        <p>Tipos de texto e a receita da redação dissertativa.</p>
                     </div>
                     <div>
-                        <div class="status-badge">🚧 Em Produção</div>
-                        <button class="btn-estudar" disabled>Em Breve</button>
+                        <div class="status-badge" id="badge-ling2">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_linguagens_2.html'">Acessar Material</button>
                     </div>
                 </div>
 
-                <div class="card" id="card-artes" style="opacity: 0.8;">
+                <div class="card" id="card-ingles1">
                     <div>
-                        <h2>🎭 Artes</h2>
-                        <p>Movimentos culturais e análise de imagens.</p>
+                        <h2>🇺🇸 Inglês <span class="tag-novo">NOVO</span></h2>
+                        <p>Estratégias de leitura: cognatos, falsos cognatos e contexto.</p>
                     </div>
                     <div>
-                        <div class="status-badge">🚧 Em Produção</div>
-                        <button class="btn-estudar" disabled>Em Breve</button>
+                        <div class="status-badge" id="badge-ingles1">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_ingles_1.html'">Acessar Material</button>
+                    </div>
+                </div>
+
+                <div class="card" id="card-artes1">
+                    <div>
+                        <h2>🎭 Artes <span class="tag-novo">NOVO</span></h2>
+                        <p>Movimentos culturais, Semana de 22 e arte urbana.</p>
+                    </div>
+                    <div>
+                        <div class="status-badge" id="badge-artes1">⏳ Pendente</div>
+                        <button class="btn-estudar" onclick="window.location.href='resumo_artes_1.html'">Acessar Material</button>
                     </div>
                 </div>
             </div>
@@ -297,16 +387,28 @@
         window.onload = function() {
             // Humanas
             carregarProgressoModulo('hist1', 'card-hist1', 'badge-hist1');
+            carregarProgressoModulo('hist2', 'card-hist2', 'badge-hist2');
             carregarProgressoModulo('geo1', 'card-geo1', 'badge-geo1');
+            carregarProgressoModulo('geo2', 'card-geo2', 'badge-geo2');
             
-            // Exatas
+            // Exatas / Matemática
             carregarProgressoModulo('mat1', 'card-mat1', 'badge-mat1');
+            carregarProgressoModulo('mat2', 'card-mat2', 'badge-mat2');
+            carregarProgressoModulo('mat3', 'card-mat3', 'badge-mat3');
             carregarProgressoModulo('mat_treino', 'card-mat-fracoes', 'badge-mat-fracoes');
             carregarProgressoModulo('regra3_simples', 'card-mat-r3s', 'badge-mat-r3s');
             carregarProgressoModulo('regra3_composta', 'card-mat-r3c', 'badge-mat-r3c');
+
+            // Ciências da Natureza
+            carregarProgressoModulo('ciencias1', 'card-ciencias1', 'badge-ciencias1');
+            carregarProgressoModulo('ciencias2', 'card-ciencias2', 'badge-ciencias2');
+            carregarProgressoModulo('ciencias3', 'card-ciencias3', 'badge-ciencias3');
             
             // Linguagens
             carregarProgressoModulo('ling1', 'card-ling1', 'badge-ling1');
+            carregarProgressoModulo('ling2', 'card-ling2', 'badge-ling2');
+            carregarProgressoModulo('ingles1', 'card-ingles1', 'badge-ingles1');
+            carregarProgressoModulo('artes1', 'card-artes1', 'badge-artes1');
         };
 
         function carregarProgressoModulo(idChave, idCard, idBadge) {

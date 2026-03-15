@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geografia: Globalização e Desigualdade - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #00e5ff; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(127, 0, 255, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--secondary); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left; }
+        body.dark-mode .branch { background-color: rgba(127, 0, 255, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--secondary); }
+        .destaque { font-weight: bold; color: var(--primary); }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>O Mundo Conectado (Mas Nem Tanto) 🌐💸</h1>
+            <p>Foco total, Híngrid! Globalização é sobre como o mundo se conectou — e quem ficou pra trás.</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: Globalização</h2>
+            <div class="node-central">O Planeta Virou uma Aldeia Global</div>
+            <div class="branches">
+                <div class="branch"><strong>O que é:</strong><br>Integração econômica, cultural e tecnológica entre os países. Internet, comércio global e multinacionais.</div>
+                <div class="branch"><strong>O lado bom:</strong><br>Acesso à informação, tecnologia, produtos de todo o mundo e comunicação instantânea.</div>
+                <div class="branch"><strong>O lado ruim:</strong><br>Desigualdade entre países ricos e pobres, exploração de mão de obra barata e perda de culturas locais.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p><span class="destaque">Globalização</span> é o processo que conectou o mundo inteiro. Hoje você compra um celular chinês, assiste série americana na Netflix e come comida japonesa no shopping. Tudo isso é globalização. A internet acelerou tudo: informação viaja em segundos.</p>
+            <p>Mas tem um porém gigante: a globalização não é igual pra todo mundo. Os <span class="destaque">países desenvolvidos</span> (EUA, Japão, Alemanha) controlam a tecnologia e o dinheiro. Os <span class="destaque">países subdesenvolvidos</span> (muitos da África e América Latina) fornecem matéria-prima barata e mão de obra explorada. É tipo um jogo onde as regras favorecem quem já tá ganhando.</p>
+            <p>Outro ponto importante: as <span class="destaque">multinacionais</span> (Nike, Apple, Coca-Cola) instalam fábricas em países pobres porque o salário é mais baixo e as leis ambientais são mais fracas. Isso gera emprego, mas em condições precárias. A desigualdade social dentro do Brasil também reflete isso: quem tem acesso à tecnologia e educação se conecta ao mundo; quem não tem, fica excluído.</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. Por que muitas multinacionais instalam suas fábricas em países subdesenvolvidos?</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Os consumidores estão no mundo todo. O motivo é o custo de produção mais baixo.')">A) Porque esses países têm mais consumidores interessados nos produtos.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Isso aí! Salários baixos e leis ambientais fracas = mais lucro pra empresa. É a lógica cruel da globalização.')">B) Porque a mão de obra é mais barata e as leis trabalhistas e ambientais são mais flexíveis.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Muitos países subdesenvolvidos têm tecnologia limitada. As empresas levam a tecnologia delas.')">C) Porque esses países possuem a melhor tecnologia do mundo.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. "A globalização conectou o mundo, mas não de forma igual." O que essa frase quer dizer?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. A globalização não beneficia todos igualmente. Países ricos lucram mais.')">A) Que todos os países se beneficiam igualmente da globalização.</button>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Exato! A globalização aumentou a conexão, mas também a desigualdade. Quem já era rico ficou mais rico.')">B) Que países ricos se beneficiam mais, enquanto países pobres continuam em desvantagem econômica e tecnológica.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. A internet existe em quase todos os países, mas o acesso é desigual.')">C) Que a internet só funciona em alguns países do mundo.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. Qual é um exemplo claro de como a globalização afeta a cultura local?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. Festas juninas são tradição brasileira, não são resultado da globalização.')">A) A celebração de festas juninas no Nordeste do Brasil.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Correto! Quando costumes de outros países (como o Halloween) substituem tradições locais, isso é a globalização cultural em ação.')">B) Jovens brasileiros comemorando o Halloween americano em vez de festas tradicionais locais.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. Cozinhar com ingredientes locais é justamente manter a cultura, não perdê-la.')">C) O uso de ingredientes regionais na culinária brasileira.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_geo2') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_geo2', notaAtual); }
+            localStorage.setItem('edhumanas_status_geo2', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>

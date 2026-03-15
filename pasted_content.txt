@@ -1,0 +1,54 @@
+                <div class="card" id="card-artes" style="opacity: 0.8;">
+                    <div>
+                        <h2>🎭 Artes</h2>
+                        <p>Movimentos culturais e análise de imagens.</p>
+                    </div>
+                    <div>
+                        <div class="status-badge">🚧 Em Produção</div>
+                        <button class="btn-estudar" disabled>Em Breve</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-limpar" onclick="limparProgresso()">🔄 Apagar meu histórico de notas deste dispositivo</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // Humanas
+            carregarProgressoModulo('hist1', 'card-hist1', 'badge-hist1');
+            carregarProgressoModulo('geo1', 'card-geo1', 'badge-geo1');
+            
+            // Exatas
+            carregarProgressoModulo('mat1', 'card-mat1', 'badge-mat1');
+            carregarProgressoModulo('mat_treino', 'card-mat-fracoes', 'badge-mat-fracoes');
+            carregarProgressoModulo('regra3_simples', 'card-mat-r3s', 'badge-mat-r3s');
+            carregarProgressoModulo('regra3_composta', 'card-mat-r3c', 'badge-mat-r3c');
+            
+            // Linguagens
+            carregarProgressoModulo('ling1', 'card-ling1', 'badge-ling1');
+        };
+
+        function carregarProgressoModulo(idChave, idCard, idBadge) {
+            let status = localStorage.getItem('edhumanas_status_' + idChave);
+            let nota = localStorage.getItem('edhumanas_nota_' + idChave);
+
+            if (status === 'concluido') {
+                document.getElementById(idCard).classList.add('concluido');
+                document.getElementById(idBadge).classList.add('concluido');
+                let notaFinal = parseFloat(nota).toFixed(1);
+                document.getElementById(idBadge).innerHTML = '✅ Maior Nota: ' + notaFinal;
+                document.querySelector('#' + idCard + ' .btn-estudar').innerHTML = '🔄 Revisar Módulo';
+            }
+        }
+
+        function limparProgresso() {
+            if(confirm("Papo reto: tem certeza que deseja apagar todo o seu progresso de estudos e notas salvas?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

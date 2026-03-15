@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciências: Ecologia e Meio Ambiente - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #2e7d32; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--accent), #1b5e20); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(46, 125, 50, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(46, 125, 50, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
+        .destaque { font-weight: bold; color: var(--accent); }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>Planeta em Jogo 🌍🔥</h1>
+            <p>Cola aqui, Híngrid! Entender ecologia é entender por que o mundo tá pedindo socorro.</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: Ecologia e Meio Ambiente</h2>
+            <div class="node-central">Tudo Está Conectado na Natureza</div>
+            <div class="branches">
+                <div class="branch"><strong>Cadeia Alimentar:</strong><br>Planta (produtor) → Herbívoro → Carnívoro → Decompositor. Se um elo quebra, todo mundo sofre.</div>
+                <div class="branch"><strong>Problemas Ambientais:</strong><br>Desmatamento, poluição da água e do ar, queimadas e aquecimento global. Tudo causado pelo ser humano.</div>
+                <div class="branch"><strong>Soluções:</strong><br>Reciclagem, saneamento básico, energia renovável (solar, eólica) e leis de proteção ambiental.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>Na natureza, ninguém vive sozinho. Tudo funciona em cadeia: a planta faz fotossíntese e produz alimento, o bichinho come a planta, o bicho maior come o bichinho, e quando todo mundo morre, os <span class="destaque">decompositores</span> (fungos e bactérias) reciclam tudo de volta pro solo. Isso é a <span class="destaque">cadeia alimentar</span>.</p>
+            <p>O problema é que o ser humano tá bagunçando tudo. <span class="destaque">Desmatamento</span> destrói o habitat dos animais. A queima de combustíveis fósseis (gasolina, diesel) libera gases que esquentam o planeta — o famoso <span class="destaque">efeito estufa</span>. E o lixo jogado nos rios contamina a água que a gente bebe.</p>
+            <p>A boa notícia: dá pra reverter. Reciclagem (separar lixo orgânico do reciclável), usar <span class="destaque">energias renováveis</span> (solar, eólica, hidrelétrica) e cobrar saneamento básico do governo são atitudes que fazem diferença real.</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. Em uma cadeia alimentar, se os sapos de uma região forem extintos, o que acontece com a população de insetos?</strong></p>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Isso mesmo! Sem o predador (sapo), os insetos se reproduzem sem controle. É o desequilíbrio ecológico.')">A) A população de insetos aumenta, pois perdeu seu predador natural.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Sem predador, os insetos não diminuem — eles explodem em quantidade.')">B) A população de insetos diminui junto com os sapos.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. A extinção de um elo sempre causa impacto nos outros. Nada fica igual.')">C) Nada muda, porque os insetos não dependem dos sapos.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. O efeito estufa é um fenômeno natural, mas está sendo intensificado pela ação humana. Qual é a principal causa dessa intensificação?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. Plantar árvores AJUDA a combater o efeito estufa, pois elas absorvem CO2.')">A) O plantio excessivo de árvores nas cidades.</button>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Exato! Queimar gasolina, diesel e carvão libera CO2 em excesso, que funciona como um cobertor que esquenta o planeta demais.')">B) A queima de combustíveis fósseis (petróleo, carvão, gás natural) que libera gases como o CO2.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. Energia solar é limpa e renovável. Ela é parte da SOLUÇÃO, não do problema.')">C) O uso de energia solar nas residências.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. Uma cidade joga esgoto sem tratamento no rio que abastece a população. Qual é a consequência mais direta disso?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. Esgoto no rio é um desastre ambiental e de saúde pública, nunca melhora nada.')">A) Melhora a qualidade da água, pois o esgoto serve como nutriente para os peixes.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. O esgoto não evapora — ele contamina a água e mata a vida aquática.')">B) Não causa impacto, pois a água do rio dilui o esgoto naturalmente.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Correto! Esgoto sem tratamento contamina a água, mata peixes e transmite doenças como cólera, hepatite A e leptospirose.')">C) Contaminação da água, morte de peixes e risco de doenças para a população.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_ciencias2') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_ciencias2', notaAtual); }
+            localStorage.setItem('edhumanas_status_ciencias2', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>

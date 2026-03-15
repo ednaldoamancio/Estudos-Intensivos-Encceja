@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regra de 3 Composta - edhumanas</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --primary: #ff007f; 
+            --secondary: #7f00ff; 
+            --accent: #00e5ff;
+            --correct: #00cc66;
+            --incorrect: #ff3333;
+            --border: rgba(127, 0, 255, 0.2);
+            --shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --border: rgba(127, 0, 255, 0.4);
+            --shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: 0.3s;
+        }
+
+        .navbar { background: linear-gradient(135deg, var(--secondary), var(--primary)); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em; transition: 0.3s; }
+        .navbar a:hover { color: var(--accent); }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .controls { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+        .btn-noturna { background-color: #555; color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .btn-noturna:hover { background-color: #333; }
+        body.dark-mode .btn-noturna { background-color: var(--accent); color: #121212; }
+
+        header { text-align: center; padding: 20px 10px 30px; }
+        header h1 { font-size: 2.2em; color: var(--primary); margin-bottom: 5px; text-transform: uppercase; }
+        header p { color: var(--text-color); font-size: 1.1em; font-weight: bold; opacity: 0.8; }
+
+        .progress-section { background: var(--card-bg); border-radius: 15px; padding: 20px; box-shadow: var(--shadow); border: 2px solid var(--border); margin-bottom: 25px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9em; font-weight: bold; margin-bottom: 10px; }
+        .progress-track { width: 100%; height: 12px; background: rgba(127,0,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.5s ease; }
+        
+        .stats-row { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+        .stat-chip { background: rgba(127,0,255,0.05); padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.85em; }
+        body.dark-mode .stat-chip { background: rgba(255,255,255,0.05); }
+        .stat-chip .val { color: var(--secondary); font-size: 1.1em; }
+        .stat-chip.err .val { color: var(--incorrect); }
+
+        .phase-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .phase-tab { background: var(--card-bg); color: var(--text-color); border: 2px solid var(--border); padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .phase-tab.active { background: var(--secondary); color: white; border-color: var(--secondary); }
+        .phase-tab.locked { opacity: 0.4; cursor: not-allowed; }
+        .phase-tab:not(.locked):hover { transform: translateY(-2px); }
+
+        .phase-header { text-align: center; margin-bottom: 20px; }
+        .phase-badge { background-color: var(--primary); color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; text-transform: uppercase; font-size: 0.8em; display: inline-block; margin-bottom: 10px; }
+        .phase-header h2 { color: var(--text-color); margin-bottom: 5px; }
+        
+        .example-box { background: rgba(0, 229, 255, 0.05); border-left: 5px solid var(--accent); padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .ex-title { font-weight: bold; color: var(--secondary); margin-bottom: 15px; font-size: 1.1em; }
+        .ex-step { margin-bottom: 10px; display: flex; gap: 10px; }
+        .ex-step-num { background: var(--secondary); color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; flex-shrink: 0; font-size: 0.8em; }
+        .ex-highlight { background: rgba(255, 0, 127, 0.1); padding: 15px; border-radius: 5px; color: var(--primary); margin-top: 15px; font-size: 0.95em; border: 1px dashed var(--primary); }
+
+        .exercise-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 15px; box-shadow: var(--shadow); transition: 0.3s; position: relative; }
+        .exercise-card.correct-final { border-color: var(--correct); }
+        .exercise-card.wrong-final { border-color: var(--incorrect); }
+        .exercise-card.shake { animation: shake 0.4s ease; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+        .card-top { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.8em; font-weight: bold; color: var(--secondary); }
+        .attempts-indicator { display: flex; gap: 5px; }
+        .attempt-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--primary); }
+        .attempt-dot.used { background: var(--primary); }
+        .attempt-dot.lost { background: var(--incorrect); border-color: var(--incorrect); }
+
+        .question-text { font-size: 1.1em; font-weight: 600; margin-bottom: 15px; line-height: 1.5; color: var(--text-color); }
+
+        .input-row { display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
+        .input-group { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+        .input-group input { background: transparent; border: 2px solid var(--border); border-radius: 8px; color: var(--text-color); font-size: 1em; font-weight: bold; padding: 12px; outline: none; transition: 0.3s; width: 100%; }
+        .input-group input:focus { border-color: var(--primary); }
+        .input-group input:disabled { opacity: 0.6; cursor: not-allowed; }
+        .input-group input.correct-input { border-color: var(--correct); background: rgba(0, 204, 102, 0.05); }
+        .input-group input.wrong-input { border-color: var(--incorrect); background: rgba(255, 51, 51, 0.05); }
+
+        .check-btn { background: var(--secondary); color: white; border: none; border-radius: 8px; font-weight: bold; padding: 12px 30px; cursor: pointer; transition: 0.3s; font-size: 0.9em; flex-shrink: 0; }
+        .check-btn:hover { background: #5900b3; }
+        .check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 0.9em; display: none; line-height: 1.5; }
+        .feedback.show { display: block; }
+        .feedback.correct-fb { background: rgba(0, 204, 102, 0.1); color: var(--correct); border-left: 4px solid var(--correct); font-weight: bold; }
+        .feedback.wrong-fb { background: rgba(255, 51, 51, 0.1); color: var(--text-color); border-left: 4px solid var(--incorrect); }
+        .feedback.warn-fb { background: rgba(255, 221, 0, 0.1); color: #b39b00; border-left: 4px solid var(--accent); font-weight: bold; }
+        body.dark-mode .feedback.warn-fb { color: var(--accent); }
+
+        .step-by-step { background: rgba(0,0,0,0.05); padding: 10px; border-radius: 5px; margin-top: 10px; font-family: monospace; font-size: 1.1em; color: var(--secondary); }
+        body.dark-mode .step-by-step { background: rgba(255,255,255,0.05); color: var(--accent); }
+
+        .phase-complete, .final-banner { background: var(--card-bg); border: 2px solid var(--primary); border-radius: 15px; padding: 30px 20px; text-align: center; margin: 30px 0; display: none; box-shadow: var(--shadow); }
+        .phase-complete.show, .final-banner.show { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+        .phase-complete h3, .final-banner h2 { color: var(--primary); margin-bottom: 10px; }
+        .action-btn { background: var(--correct); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 1.1em; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .action-btn:hover { background: #00994d; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="index.html">🏠 Início</a>
+    <a href="cronograma.html">📅 Rotina</a>
+</nav>
+
+<div class="container">
+    <div class="controls">
+        <button class="btn-noturna" onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+    </div>
+
+    <header>
+        <h1>Regra de 3 Composta</h1>
+        <p>3 ou mais informações na jogada! O nível subiu, Híngrid. 🚀</p>
+    </header>
+
+    <div class="progress-section">
+        <div class="progress-label">
+            <span>Missões Concluídas</span>
+            <span id="prog-text">0 de 60</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="stats-row">
+            <div class="stat-chip">✔️ Acertos: <span class="val" id="score-display">0</span></div>
+            <div class="stat-chip err">❌ Erros: <span class="val" id="errors-display">0</span></div>
+        </div>
+    </div>
+
+    <div class="phase-tabs" id="phase-tabs">
+        <button class="phase-tab active" data-phase="1" onclick="goToPhase(1)">Fase 1 (Direta)</button>
+        <button class="phase-tab locked" data-phase="2" onclick="goToPhase(2)">Fase 2 (Direta)</button>
+        <button class="phase-tab locked" data-phase="3" onclick="goToPhase(3)">Fase 3 (Inversas)</button>
+        <button class="phase-tab locked" data-phase="4" onclick="goToPhase(4)">Fase 4 (Inversas)</button>
+        <button class="phase-tab locked" data-phase="5" onclick="goToPhase(5)">O Chefe (Mista)</button>
+    </div>
+
+    <div id="main-content"></div>
+</div>
+
+<script>
+// Gerador das 60 questões (15 - 15 - 10 - 10 - 10)
+const q_fase1 = [
+    { q:"Trabalhando 2 horas por dia durante 3 dias, você lê 60 páginas. Lendo 4 horas por dia durante 5 dias, lerá quantas páginas?", ans:"200", exp:"Variável principal: Páginas (X).<br>Mais horas/dia = Mais páginas (Direta).<br>Mais dias = Mais páginas (Direta).<br>60/X = (2/4) * (3/5)<br>60/X = 6/20 -> 6X = 1200 -> X = 200" },
+    { q:"3 máquinas imprimem 100 apostilas em 2 dias. 6 máquinas imprimem quantas apostilas em 4 dias?", ans:"400", exp:"Mais máquinas = Mais apostilas (Direta).<br>Mais dias = Mais apostilas (Direta).<br>100/X = (3/6) * (2/4)<br>100/X = 6/24 -> 6X = 2400 -> X = 400" },
+    { q:"2 cozinheiros fazem 10 pizzas em 3 horas. 4 cozinheiros fariam quantas pizzas em 6 horas?", ans:"40", exp:"Mais cozinheiros = Mais pizzas.<br>Mais horas = Mais pizzas.<br>10/X = (2/4) * (3/6)<br>10/X = 6/24 -> 6X = 240 -> X = 40" },
+    { q:"Comprando 3 kg de carne e pagando em 2 vezes, o total é R$ 120. Se comprar 6 kg para pagar em 4 vezes, qual será o valor total?", ans:"240", exp:"A quantidade de parcelas não altera o valor *total* do produto neste contexto da questão, é apenas um distrator! Apenas a carne importa.<br>3 kg = 120 reais<br>6 kg = X reais. (Direta). X = 240." }, // Exemplo para fazer ela pensar no que afeta o X
+    { q:"Um caminhão de 5 toneladas faz 2 viagens e transporta 10 ton. Um caminhão de 10 toneladas fazendo 4 viagens transporta quantas toneladas?", ans:"40", exp:"10/X = (5/10) * (2/4) -> 10/X = 10/40 -> 10X = 400 -> X = 40" },
+    { q:"2 fornos assam 30 pães em 1 hora. 4 fornos assam quantos pães em 2 horas?", ans:"120", exp:"30/X = (2/4) * (1/2) -> 30/X = 2/8 -> 2X = 240 -> X = 120" },
+    { q:"Trabalhando 4 dias, com jornada de 5 horas, João ganha R$ 200. Trabalhando 8 dias com jornada de 10 horas, quanto ganhará?", ans:"800", exp:"Mais dias = Mais dinheiro. Mais horas = Mais dinheiro.<br>200/X = (4/8) * (5/10) -> 200/X = 20/80 -> 20X = 16000 -> X = 800" },
+    { q:"5 costureiras, trabalhando 6 horas/dia, fazem 60 camisas. 10 costureiras trabalhando 8 horas/dia farão quantas camisas?", ans:"160", exp:"60/X = (5/10) * (6/8) -> 60/X = 30/80 -> 30X = 4800 -> X = 160" },
+    { q:"Se 2 mangueiras jogam 50 litros de água em 5 minutos. 4 mangueiras em 10 minutos jogarão quantos litros?", ans:"200", exp:"50/X = (2/4) * (5/10) -> 50/X = 10/40 -> 10X = 2000 -> X = 200" },
+    { q:"Se 3 pessoas gastam R$ 90 no mercado em 2 dias, 6 pessoas gastariam quanto em 4 dias?", ans:"360", exp:"90/X = (3/6) * (2/4) -> 90/X = 6/24 -> 6X = 2160 -> X = 360" },
+    { q:"1 impressora em 5 minutos imprime 25 folhas. 3 impressoras em 10 minutos imprimem quantas folhas?", ans:"150", exp:"25/X = (1/3) * (5/10) -> 25/X = 5/30 -> 5X = 750 -> X = 150" },
+    { q:"Para alimentar 2 gatos por 5 dias preciso de 10 kg de ração. Para 4 gatos por 10 dias preciso de quantos kg?", ans:"40", exp:"10/X = (2/4) * (5/10) -> 10/X = 10/40 -> 10X = 400 -> X = 40" },
+    { q:"3 caminhões transportam 60 caixas em 2 viagens. 5 caminhões em 4 viagens transportam quantas caixas?", ans:"200", exp:"60/X = (3/5) * (2/4) -> 60/X = 6/20 -> 6X = 1200 -> X = 200" },
+    { q:"10 alunos consomem 20 lanches em 2 dias. 30 alunos em 4 dias consomem quantos lanches?", ans:"120", exp:"20/X = (10/30) * (2/4) -> 20/X = 20/120 -> 20X = 2400 -> X = 120" },
+    { q:"4 pedreiros recebem R$ 800 por 2 dias. 8 pedreiros receberão quanto por 5 dias?", ans:"4000", exp:"800/X = (4/8) * (2/5) -> 800/X = 8/40 -> 8X = 32000 -> X = 4000" }
+];
+
+const q_fase2 = [
+    { q:"Numa confecção, 3 máquinas fazem 90 peças em 2 horas. 5 máquinas farão quantas peças em 4 horas?", ans:"300", exp:"90/X = (3/5) * (2/4) -> 90/X = 6/20 -> 6X = 1800 -> X = 300" },
+    { q:"2 tratores limpam 40 hectares em 3 dias. 6 tratores limparão quantos hectares em 9 dias?", ans:"360", exp:"40/X = (2/6) * (3/9) -> 40/X = 6/54 -> 6X = 2160 -> X = 360" },
+    { q:"5 digitadores, digitando 4 horas por dia, fazem 100 páginas. 10 digitadores, trabalhando 6 horas/dia, farão quantas páginas?", ans:"300", exp:"100/X = (5/10) * (4/6) -> 100/X = 20/60 -> 20X = 6000 -> X = 300" },
+    { q:"Se 3 pessoas comem 15 pães em 2 dias, 6 pessoas comem quantos pães em 6 dias?", ans:"90", exp:"15/X = (3/6) * (2/6) -> 15/X = 6/36 -> 6X = 540 -> X = 90" },
+    { q:"Para fazer 2 km de asfalto, 10 operários levam 5 dias. Para fazer 8 km, 20 operários levariam quantos dias? (Atenção no X)", ans:"10", exp:"A variável principal é Dias (X). Mais km = Mais dias (Direta). Mais operários = MENOS dias (Inversa!).<br>5/X = (2/8) * (20/10) [inverteu operários!]<br>5/X = 40/80 -> 40X = 400 -> X = 10" }, // Questão transição!
+    { q:"Se 2 fábricas gastam 500 kWh em 5 dias, 4 fábricas gastarão quanto em 10 dias?", ans:"2000", exp:"500/X = (2/4) * (5/10) -> 500/X = 10/40 -> 10X = 20000 -> X = 2000" },
+    { q:"Uma pessoa quebra 20 ovos em 2 minutos. 4 pessoas quebram quantos ovos em 5 minutos?", ans:"200", exp:"20/X = (1/4) * (2/5) -> 20/X = 2/20 -> 2X = 400 -> X = 200" },
+    { q:"3 caminhões gastam 120 litros de diesel em 2 viagens. 6 caminhões em 5 viagens vão gastar quantos litros?", ans:"600", exp:"120/X = (3/6) * (2/5) -> 120/X = 6/30 -> 6X = 3600 -> X = 600" },
+    { q:"4 professores corrigem 200 provas em 2 dias. 8 professores corrigem quantas provas em 4 dias?", ans:"800", exp:"200/X = (4/8) * (2/4) -> 200/X = 8/32 -> 8X = 6400 -> X = 800" },
+    { q:"2 carpinteiros colocam 50 portas em 3 dias. 6 carpinteiros colocam quantas portas em 6 dias?", ans:"300", exp:"50/X = (2/6) * (3/6) -> 50/X = 6/36 -> 6X = 1800 -> X = 300" },
+    { q:"Se a internet de 10 Mbps baixa 5 GB em 2 horas. Uma internet de 50 Mbps vai baixar quantos GB em 4 horas?", ans:"50", exp:"5/X = (10/50) * (2/4) -> 5/X = 20/200 -> 20X = 1000 -> X = 50" },
+    { q:"Se 3 fornos queimam 60 tijolos em 2 horas. 9 fornos vão queimar quantos tijolos em 4 horas?", ans:"360", exp:"60/X = (3/9) * (2/4) -> 60/X = 6/36 -> 6X = 2160 -> X = 360" },
+    { q:"Se 5 vacas dão 100 litros de leite em 2 dias. 10 vacas vão dar quantos litros em 5 dias?", ans:"500", exp:"100/X = (5/10) * (2/5) -> 100/X = 10/50 -> 10X = 5000 -> X = 500" },
+    { q:"2 caixas d'água enchem 40 galões em 3 horas. 4 caixas vão encher quantos galões em 6 horas?", ans:"160", exp:"40/X = (2/4) * (3/6) -> 40/X = 6/24 -> 6X = 960 -> X = 160" },
+    { q:"3 pintores usam 15 latas de tinta em 2 dias. 6 pintores usarão quantas latas em 4 dias?", ans:"60", exp:"15/X = (3/6) * (2/4) -> 15/X = 6/24 -> 6X = 360 -> X = 60" }
+];
+
+const q_fase3 = [
+    { q:"6 pedreiros, trabalhando 8 horas/dia, fazem o muro em 15 dias. 8 pedreiros trabalhando 6 horas/dia farão em quantos dias?", ans:"15", exp:"O 'X' é Dias.<br>Mais pedreiros = Menos dias (INVERSA, inverte o 6/8 para 8/6).<br>Mais horas/dia = Menos dias (INVERSA, inverte o 8/6 para 6/8).<br>15/X = (8/6) * (6/8) -> 15/X = 48/48 -> 15/X = 1 -> X = 15" },
+    { q:"12 máquinas produzem os sapatos em 10 dias de 8 horas. 8 máquinas trabalhando 10 horas farão em quantos dias?", ans:"12", exp:"X é Dias. Mais máquinas = Menos dias (Inversa: vira 8/12). Mais horas = Menos dias (Inversa: vira 10/8).<br>10/X = (8/12) * (10/8) -> 10/X = 80/96 -> 80X = 960 -> X = 12" },
+    { q:"Trabalhando 6h/dia, 10 homens constroem uma ponte em 12 dias. Trabalhando 8h/dia, 15 homens construirão em quantos dias?", ans:"6", exp:"X = Dias. Mais homens = Menos dias (Inversa: 15/10). Mais h/dia = Menos dias (Inversa: 8/6).<br>12/X = (15/10) * (8/6) -> 12/X = 120/60 -> 12/X = 2 -> 2X = 12 -> X = 6" },
+    { q:"5 tratores levam 6 dias, rodando 4h/dia, para arar. 3 tratores rodando 5h/dia levarão quantos dias?", ans:"8", exp:"X = Dias. Inversa para tratores (3/5) e Inversa para horas (5/4).<br>6/X = (3/5) * (5/4) -> 6/X = 15/20 -> 15X = 120 -> X = 8" },
+    { q:"Para esvaziar um tanque, 4 ralos iguais levam 10 horas. Se tivessem 8 ralos, levariam quantas horas?", ans:"5", exp:"Essa é composta disfarçada de simples! Mais ralos = menos tempo. Inversa.<br>10/X = 8/4 -> 8X = 40 -> X = 5" },
+    { q:"8 operários montam o galpão em 20 dias (6h/dia). 12 operários (8h/dia) montam em quantos dias?", ans:"10", exp:"X = Dias. Mais operários = Menos dias (Inversa: 12/8). Mais h/dia = Menos dias (Inversa: 8/6).<br>20/X = (12/8) * (8/6) -> 20/X = 96/48 -> 20/X = 2 -> 2X = 20 -> X = 10" },
+    { q:"20 galinhas comem a ração em 15 dias. Se eu comprar mais 10 galinhas (ficando com 30), a ração dura quantos dias?", ans:"10", exp:"Simples inversa (pegadinha pra manter atenção). Mais galinhas = Menos dias.<br>15/X = 30/20 -> 30X = 300 -> X = 10" },
+    { q:"Com velocidade de 60 km/h rodando 4h/dia, chego em 6 dias. A 80 km/h rodando 6h/dia, chego em quantos dias?", ans:"3", exp:"Mais velocidade = Menos dias (Inversa: 80/60). Mais h/dia = Menos dias (Inversa: 6/4).<br>6/X = (80/60) * (6/4) -> 6/X = 480/240 -> 6/X = 2 -> 2X = 6 -> X = 3" },
+    { q:"10 digitadores fazem o trabalho em 12 dias (5h/dia). 15 digitadores (4h/dia) farão em quantos dias?", ans:"10", exp:"Inversa para digitadores (15/10) e horas (4/5).<br>12/X = (15/10) * (4/5) -> 12/X = 60/50 -> 60X = 600 -> X = 10" },
+    { q:"6 impressoras imprimem o livro em 8 horas (ligadas 3 dias). 4 impressoras (ligadas 4 dias) imprimirão em quantas horas/dia?", ans:"9", exp:"X = Horas. Menos impressoras = Mais horas (Inversa: 4/6). Mais dias de prazo = Menos horas precisarei ligar (Inversa: 4/3).<br>8/X = (4/6) * (4/3) -> 8/X = 16/18 -> 16X = 144 -> X = 9" }
+];
+
+const q_fase4 = [
+    { q:"4 torneiras enchem 2 tanques em 10 horas. 6 torneiras encheriam 3 tanques em quantas horas?", ans:"10", exp:"X = Horas. Mais torneiras = Menos horas (Inversa: 6/4). Mais tanques = Mais horas (Direta: 2/3).<br>10/X = (6/4) * (2/3) -> 10/X = 12/12 -> X = 10" },
+    { q:"15 trabalhadores fazem 30 km de estrada em 6 dias. 20 trabalhadores farão 40 km em quantos dias?", ans:"6", exp:"X = Dias. Mais trabalhadores = Menos dias (Inversa: 20/15). Mais km = Mais dias (Direta: 30/40).<br>6/X = (20/15) * (30/40) -> 6/X = 600/600 -> X = 6" },
+    { q:"3 gatos comem 6 potes de ração em 4 dias. 5 gatos comem 10 potes em quantos dias?", ans:"4", exp:"X = Dias. Mais gatos = Menos dias (Inversa: 5/3). Mais potes = Mais dias (Direta: 6/10).<br>4/X = (5/3) * (6/10) -> 4/X = 30/30 -> X = 4" },
+    { q:"Um caminhão a 50 km/h roda 200 km em 4 horas. A 100 km/h, rodará 400 km em quantas horas?", ans:"4", exp:"X = Horas. Mais veloz = Menos horas (Inversa: 100/50). Mais km = Mais horas (Direta: 200/400).<br>4/X = (100/50) * (200/400) -> 4/X = 20000/20000 -> X = 4" },
+    { q:"2 padeiros fazem 50 pães em 4 horas. 4 padeiros farão 100 pães em quantas horas?", ans:"4", exp:"X = Horas. Mais padeiros = Menos horas (Inv: 4/2). Mais pães = Mais horas (Dir: 50/100).<br>4/X = (4/2) * (50/100) -> 4/X = 200/200 -> X = 4" },
+    { q:"8 máquinas fazem 160 peças em 5 dias. 10 máquinas fazem 200 peças em quantos dias?", ans:"5", exp:"X = Dias. Mais máq = Menos dias (Inv: 10/8). Mais peças = Mais dias (Dir: 160/200).<br>5/X = (10/8) * (160/200) -> 5/X = 1600/1600 -> X = 5" },
+    { q:"Em 6 dias, 4 pessoas comem 12 kg de arroz. Em 8 dias, 6 pessoas comem quantos kg?", ans:"24", exp:"X = kg. Mais pessoas = Mais kg (Direta: 4/6). Mais dias = Mais kg (Direta: 6/8).<br>12/X = (4/6) * (6/8) -> 12/X = 24/48 -> 24X = 576 -> X = 24" },
+    { q:"Trabalhando 5h/dia, 6 pintores pintam 2 casas. Trabalhando 10h/dia, 3 pintores pintam quantas casas?", ans:"2", exp:"X = Casas. Mais horas = Mais casas (Dir: 5/10). Menos pintores = Menos casas (Dir: 6/3).<br>2/X = (5/10) * (6/3) -> 2/X = 30/30 -> X = 2" },
+    { q:"Numa fábrica, 10 funcionários (trabalhando 8h/dia) fazem 40 motos. Quantos funcionários trabalhando 4h/dia fariam 20 motos?", ans:"10", exp:"X = Funcionários. Menos horas = MAIS func. (Inversa: 4/8). Menos motos = Menos func. (Direta: 40/20).<br>10/X = (4/8) * (40/20) -> 10/X = 160/160 -> X = 10" },
+    { q:"12 ônibus transportam 600 pessoas em 2 viagens. 8 ônibus precisarão de quantas viagens para transportar 800 pessoas?", ans:"4", exp:"X = Viagens. Menos ônibus = Mais viagens (Inversa: 8/12). Mais pessoas = Mais viagens (Direta: 600/800).<br>2/X = (8/12) * (600/800) -> 2/X = 4800/9600 -> 2/X = 1/2 -> X = 4" }
+];
+
+const q_fase5 = [
+    { q:"2 homens constroem 1 barco em 5 dias. 4 homens constroem 2 barcos em quantos dias?", ans:"5", exp:"X = Dias. Mais homens = Menos dias (Inv: 4/2). Mais barcos = Mais dias (Dir: 1/2).<br>5/X = (4/2) * (1/2) -> 5/X = 4/4 -> X = 5" },
+    { q:"Se 30 operários fazem uma casa em 40 dias. 40 operários fazem a mesma casa em quantos dias?", ans:"30", exp:"Simples Inversa! 40/X = 40/30 (já invertido) -> X = 30" },
+    { q:"Se 5 cadernos custam 30 reais, quanto custam 15 cadernos?", ans:"90", exp:"Simples Direta! 5/15 = 30/X -> 5X = 450 -> X = 90" },
+    { q:"10 máquinas (8h/dia) produzem 1000 peças. 5 máquinas (4h/dia) produzem quantas peças?", ans:"250", exp:"X = Peças. Menos máq = Menos peças (Dir: 10/5). Menos horas = Menos peças (Dir: 8/4).<br>1000/X = (10/5) * (8/4) -> 1000/X = 80/20 -> 1000/X = 4 -> 4X = 1000 -> X = 250" },
+    { q:"O muro foi feito por 4 pedreiros em 10 dias de 6 horas. Quantos pedreiros fariam o muro em 5 dias de 8 horas?", ans:"6", exp:"X = Pedreiros. Menos dias = Mais pedreiros (Inv: 5/10). Mais horas = Menos pedreiros (Inv: 8/6).<br>4/X = (5/10) * (8/6) -> 4/X = 40/60 -> 40X = 240 -> X = 6" },
+    { q:"5 cachorros comem 10 kg de ração em 4 dias. Quantos kg comerão 10 cachorros em 8 dias?", ans:"40", exp:"X = Kg. Mais cães = Mais Kg (Dir: 5/10). Mais dias = Mais Kg (Dir: 4/8).<br>10/X = (5/10) * (4/8) -> 10/X = 20/80 -> 20X = 800 -> X = 40" },
+    { q:"Um trem faz a viagem em 4h a 90 km/h. Se reduzir para 60 km/h, gasta quantas horas?", ans:"6", exp:"Inversa! 4/X = 60/90 -> 60X = 360 -> X = 6" },
+    { q:"3 caminhões levam 15 toneladas em 2 dias. 6 caminhões levarão 45 toneladas em quantos dias?", ans:"3", exp:"X = Dias. Mais cam. = Menos dias (Inv: 6/3). Mais ton. = Mais dias (Dir: 15/45).<br>2/X = (6/3) * (15/45) -> 2/X = 90/135 -> 90X = 270 -> X = 3" },
+    { q:"6 digitadores fazem 12 livros em 10 dias. 3 digitadores fazem 6 livros em quantos dias?", ans:"10", exp:"X = Dias. Menos dig. = Mais dias (Inv: 3/6). Menos livros = Menos dias (Dir: 12/6).<br>10/X = (3/6) * (12/6) -> 10/X = 36/36 -> X = 10" },
+    { q:"10 estudantes leem 20 apostilas em 5 dias. 20 estudantes leem 80 apostilas em quantos dias?", ans:"10", exp:"X = Dias. Mais estudantes = Menos dias (Inv: 20/10). Mais apostilas = Mais dias (Dir: 20/80).<br>5/X = (20/10) * (20/80) -> 5/X = 400/800 -> 5/X = 1/2 -> X = 10" }
+];
+
+const phases = [
+  { id:1, title:'A Base do Combo', subtitle:'Fase 1: Composta Direta (Cresceu junto)',
+    exampleTitle:'As 3 Grandezas do Bem',
+    exampleContent:`
+      <div class="ex-highlight">💡 <strong>Pega a visão:</strong> Identifique primeiro de quem é a pergunta (a coluna do X). Compare cada coluna com o X.</div>
+      <div class="ex-step"><div class="ex-step-num">1</div><div><strong>Tabela:</strong><br>2 máq --- 3 dias --- 60 peças<br>3 máq --- 4 dias --- X peças</div></div>
+      <div class="ex-step"><div class="ex-step-num">2</div><div><strong>Análise:</strong><br>Mais máquinas? Fazem <strong>MAIS</strong> peças (Direta).<br>Mais dias trabalhando? Fazem <strong>MAIS</strong> peças (Direta).</div></div>
+      <div class="ex-step"><div class="ex-step-num">3</div><div><strong>Isola o X e resolve:</strong><br>60/X = (2/3) * (3/4) -> 60/X = 6/12 -> 6X = 720 -> <strong>X = 120</strong>!</div></div>`,
+    exercises: q_fase1
+  },
+  { id:2, title:'Pegando Velocidade', subtitle:'Fase 2: Cotidiano e Composta Direta',
+    exampleTitle:'Dinheiro e Tempo',
+    exampleContent:`
+      <div class="ex-highlight">Organize a leitura. "Se eu trabalhar mais dias, ganho mais. Se eu trabalhar mais horas, também ganho mais." Não tem mistério se você organizar a tabela!</div>`,
+    exercises: q_fase2
+  },
+  { id:3, title:'A Inversão', subtitle:'Fase 3: A Composta Inversa entra no Jogo',
+    exampleTitle:'Quando mais é menos!',
+    exampleContent:`
+      <div class="ex-highlight">⚠️ <strong>Atenção máxima:</strong> Se ao analisar, uma coluna diminuir o valor do X, você INVERTE aquela fração na equação!</div>
+      <div class="ex-step"><div class="ex-step-num">!</div><div>Se o problema fala de <strong>Máquinas x Dias</strong> ou <strong>Pedreiros x Horas</strong>, a chance de ser inversa é de 99%! (Mais gente trabalhando = o serviço acaba mais rápido).</div></div>`,
+    exercises: q_fase3
+  },
+  { id:4, title:'O Paredão', subtitle:'Fase 4: Misturando Direta e Inversa',
+    exampleTitle:'A Receita do Sucesso',
+    exampleContent:`
+      <div class="ex-highlight">Uma coluna pode ser direta e a outra inversa ao mesmo tempo na equação. Isole a fração do X e multiplique as outras duas no formato correto!</div>`,
+    exercises: q_fase4
+  },
+  { id:5, title:'O Chefe Final', subtitle:'Fase 5: O Combo Absoluto',
+    exampleTitle:'Mestre do Encceja',
+    exampleContent:`
+      <div class="ex-highlight">A prova não avisa nada. Pode ser regra simples, direta, inversa ou composta. Respire fundo, monte a tabela e conquiste o seu diploma!</div>`,
+    exercises: q_fase5
+  }
+];
+
+const MAX_ATTEMPTS = 2;
+let state = {
+  currentPhase: 1, unlockedPhases: [1], answers: {},
+  phaseCorrect: {1:0, 2:0, 3:0, 4:0, 5:0}, phaseDone: {1:0, 2:0, 3:0, 4:0, 5:0}, totalCorrect: 0,
+};
+
+// Função mágica de confetes!
+function lançarConfetes() {
+    var duration = 3 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+    function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+    var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) { return clearInterval(interval); }
+        var particleCount = 50 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
+}
+
+function renderAll() {
+  const container = document.getElementById('main-content');
+  container.innerHTML = '';
+
+  phases.forEach(ph => {
+    const wrap = document.createElement('div');
+    wrap.id = `phase-${ph.id}`;
+    wrap.style.display = ph.id === state.currentPhase ? 'block' : 'none';
+
+    wrap.innerHTML = `
+      <div class="phase-header">
+        <div class="phase-badge">${ph.title}</div>
+        <h2>${ph.subtitle}</h2>
+      </div>
+      <div class="example-box">
+        <div class="ex-title">📌 ${ph.exampleTitle}</div>
+        ${ph.exampleContent}
+      </div>
+    `;
+
+    ph.exercises.forEach((ex, i) => {
+      const key = `${ph.id}-${i}`;
+      const saved = state.answers[key] || {attempts:0, done:false};
+      const globalNum = i + 1; 
+
+      const card = document.createElement('div');
+      card.className = `exercise-card`;
+      card.id = `card-${key}`;
+      
+      if (saved.done) card.classList.add(saved.correct ? 'correct-final' : 'wrong-final');
+
+      const dotsHtml = [0,1].map(d => {
+        let cls = '';
+        if (saved.done && !saved.correct) cls = 'lost';
+        else if (d < (saved.attempts||0)) cls = 'used';
+        return `<div class="attempt-dot ${cls}" id="dot-${key}-${d}"></div>`;
+      }).join('');
+
+      const dis = saved.done ? 'disabled' : '';
+      const inputCls = saved.done ? (saved.correct ? 'correct-input':'wrong-input') : '';
+      const inputVal = saved.val||'';
+      
+      let fbCls='', fbHtml='';
+      if (saved.done) {
+        if (saved.correct) { 
+            fbCls='correct-fb show'; fbHtml='✔️ Mandou bem! Resposta exata.'; 
+        } else { 
+            fbCls='wrong-fb show'; 
+            fbHtml=`❌ Acabaram as chances.<br><strong>Resposta: ${ex.ans.replace('.',',')}</strong><br><div class="step-by-step">💡 <strong>Como resolver:</strong><br>${ex.exp}</div>`; 
+        }
+      } else if (saved.attempts > 0) {
+        fbCls='warn-fb show';
+        fbHtml=`⚠️ Quase! Você ainda tem <strong>1 tentativa</strong>. Refaça o cálculo com calma.`;
+      }
+
+      card.innerHTML = `
+        <div class="card-top">
+          <span>DESAFIO ${globalNum}</span>
+          <div class="attempts-indicator">${dotsHtml}</div>
+        </div>
+        <div class="question-text">${ex.q}</div>
+        <div class="input-row">
+          <div class="input-group">
+            <input type="text" id="ans-${key}" placeholder="Sua resposta..." value="${inputVal}" ${dis} class="${inputCls}" autocomplete="off">
+          </div>
+          <button class="check-btn" id="btn-${key}" onclick="checkAnswer('${key}','${ex.ans}')" ${dis}>Verificar</button>
+        </div>
+        <div class="feedback ${fbCls}" id="fb-${key}">
+          <span>${fbHtml}</span>
+        </div>
+      `;
+      wrap.appendChild(card);
+    });
+
+    const banner = document.createElement('div');
+    banner.className = `phase-complete ${state.phaseDone[ph.id] >= ph.exercises.length ? 'show' : ''}`;
+    banner.id = `banner-${ph.id}`;
+    banner.innerHTML = `
+      <h3>Missão da Fase Cumprida! 🚀</h3>
+      <p>Você enfrentou todos os desafios desta etapa.</p>
+      ${ph.id < 5 ? `<button class="action-btn" onclick="unlockNextPhase(${ph.id})">Avançar para a próxima fase</button>` : ''}
+    `;
+    wrap.appendChild(banner);
+    container.appendChild(wrap);
+  });
+
+  const finalBanner = document.createElement('div');
+  finalBanner.className = `final-banner ${state.phaseDone[5] >= phases[4].exercises.length ? 'show' : ''}`;
+  finalBanner.id = 'final-banner';
+  finalBanner.innerHTML = `
+    <h2>Você Zerou o Treino! 🏆</h2>
+    <p>Incrível, Híngrid! 60 desafios da temida Regra de Três Composta superados! Você está pronta para gabaritar Matemática.</p>
+    <button class="action-btn" style="background:var(--primary);" onclick="salvarNotaFinal()">Salvar Progresso e Voltar</button>
+  `;
+  container.appendChild(finalBanner);
+  updateUI();
+}
+
+function norm(s){ return s.trim().replace(',','.').trim(); }
+
+function checkAnswer(key, cAns) {
+  let saved = state.answers[key] || {attempts:0, done:false, val:''};
+  if (saved.done) return;
+
+  const ansEl = document.getElementById(`ans-${key}`);
+  const btn   = document.getElementById(`btn-${key}`);
+  const fb    = document.getElementById(`fb-${key}`);
+  const card  = document.getElementById(`card-${key}`);
+
+  const uAns = parseFloat(norm(ansEl.value));
+  const rAns = parseFloat(cAns);
+  const isOk = !isNaN(uAns) && Math.abs(uAns - rAns) < 0.01;
+
+  saved.attempts++;
+  saved.val = ansEl.value;
+
+  for (let d=0;d<MAX_ATTEMPTS;d++) {
+    const dot = document.getElementById(`dot-${key}-${d}`);
+    if (dot && d < saved.attempts) dot.classList.add('used');
+  }
+
+  const [phId, exIdx] = key.split('-');
+  const ex = phases.find(p=>p.id===+phId).exercises[+exIdx];
+
+  if (isOk) {
+    saved.done = true; saved.correct = true;
+    ansEl.className='correct-input'; ansEl.disabled=true; btn.disabled=true;
+    card.classList.add('correct-final');
+    fb.className='feedback correct-fb show';
+    fb.innerHTML='✔️ Pega a visão! Resposta perfeita.';
+
+    state.totalCorrect++;
+    state.phaseCorrect[+phId]++;
+  } else if (saved.attempts >= MAX_ATTEMPTS) {
+    saved.done = true; saved.correct = false;
+    ansEl.className='wrong-input'; ansEl.disabled=true; btn.disabled=true;
+    card.classList.add('wrong-final');
+    card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),400);
+
+    for(let d=0;d<MAX_ATTEMPTS;d++){const dot=document.getElementById(`dot-${key}-${d}`);if(dot)dot.className='attempt-dot lost';}
+
+    fb.className='feedback wrong-fb show';
+    fb.innerHTML=`❌ Acabaram as chances.<br><strong>A resposta era: ${cAns.replace('.',',')}</strong><br><div class="step-by-step">💡 <strong>Como resolver:</strong><br>${ex.exp}</div>`;
+  } else {
+    card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),400);
+    ansEl.style.borderColor = "var(--incorrect)";
+    fb.className='feedback warn-fb show';
+    fb.innerHTML=`⚠️ Quase lá! Você ainda tem <strong>1 tentativa</strong>. Se errar, a explicação vai aparecer!`;
+  }
+
+  state.answers[key] = saved;
+  updateUI();
+
+  if (saved.done) {
+      state.phaseDone[+phId]++;
+      const qtdFase = phases.find(p => p.id === +phId).exercises.length;
+      if (state.phaseDone[+phId] >= qtdFase) {
+          document.getElementById(`banner-${+phId}`).classList.add('show');
+          lançarConfetes();
+          if (+phId === 5) {
+              document.getElementById('final-banner').classList.add('show');
+          } else {
+              setTimeout(() => { unlockNextPhase(+phId); }, 3500);
+          }
+      }
+  }
+}
+
+function unlockNextPhase(cur) {
+  const next = cur+1;
+  if (!state.unlockedPhases.includes(next)) state.unlockedPhases.push(next);
+  goToPhase(next);
+}
+
+function goToPhase(id) {
+  if (!state.unlockedPhases.includes(id)) return;
+  state.currentPhase = id;
+  phases.forEach(p=>{ const el=document.getElementById(`phase-${p.id}`); if(el) el.style.display = p.id === id ? 'block' : 'none'; });
+  document.querySelectorAll('.phase-tab').forEach(tab=>{
+    const tid=+tab.dataset.phase;
+    tab.classList.remove('active','locked');
+    if (tid===state.currentPhase) tab.classList.add('active');
+    if (!state.unlockedPhases.includes(tid)) tab.classList.add('locked');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateUI() {
+  const answered = Object.values(state.answers).filter(a=>a.done).length;
+  document.getElementById('prog-text').textContent = `${answered} de 60`;
+  document.getElementById('progress-fill').style.width = `${(answered/60)*100}%`;
+  document.getElementById('score-display').textContent = state.totalCorrect;
+  document.getElementById('errors-display').textContent = answered - state.totalCorrect;
+}
+
+function salvarNotaFinal() {
+    let notaTreino = (state.totalCorrect / 60) * 10;
+    let notaAntiga = localStorage.getItem('edhumanas_nota_regra3_composta') || 0;
+    if (notaTreino > notaAntiga) { localStorage.setItem('edhumanas_nota_regra3_composta', notaTreino); }
+    localStorage.setItem('edhumanas_status_regra3_composta', 'concluido');
+    alert('Missão Impossível Concluída! Você acertou ' + state.totalCorrect + ' de 60. Sua nota (' + notaTreino.toFixed(1) + ') foi salva!');
+    window.location.href = 'index.html';
+}
+
+renderAll();
+</script>
+</body>
+</html>

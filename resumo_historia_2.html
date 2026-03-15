@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>História: Da Independência à República - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #ffdd00; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: #b8860b; margin-top: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .node-central { background: linear-gradient(135deg, #cc0000, var(--secondary)); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(204, 0, 0, 0.05); padding: 10px; border-radius: 8px; border-left: 4px solid #cc0000; width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(204, 0, 0, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid #cc0000; }
+        .destaque { font-weight: bold; color: #cc0000; }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>Da Independência à República 🇧🇷⚔️</h1>
+            <p>Segura essa, Híngrid! O Brasil se libertou de Portugal, mas a luta por democracia foi longa.</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: A Montanha-Russa do Brasil</h2>
+            <div class="node-central">Do Grito à Democracia</div>
+            <div class="branches">
+                <div class="branch"><strong>Independência (1822):</strong><br>Dom Pedro I gritou "Independência ou Morte!" Mas quem se beneficiou foram as elites. O povo continuou na mesma.</div>
+                <div class="branch"><strong>Era Vargas (1930-1945):</strong><br>Getúlio Vargas: criou a CLT (direitos trabalhistas), mas governou como ditador no Estado Novo.</div>
+                <div class="branch"><strong>Ditadura Militar (1964-1985):</strong><br>Golpe militar. Censura, tortura e "milagre econômico". O povo lutou e reconquistou a democracia.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>Em 1822, o Brasil virou independente de Portugal. Mas calma: não foi uma revolução popular. Foi um acordo entre elites. A escravidão continuou, o povo não ganhou direitos e quem mandava eram os mesmos donos de terra. A <span class="destaque">Independência</span> foi mais uma troca de chefe do que uma libertação real.</p>
+            <p>Pula pro século XX: <span class="destaque">Getúlio Vargas</span> chegou ao poder em 1930. Ele criou a <span class="destaque">CLT</span> (Consolidação das Leis do Trabalho), que garantiu salário mínimo, férias e carteira assinada. Mas também foi ditador no período do Estado Novo (1937-1945), censurando a imprensa e prendendo opositores.</p>
+            <p>Em 1964, os militares deram um <span class="destaque">golpe</span> e ficaram no poder até 1985. Foi um período de censura pesada, tortura de opositores e o AI-5 (o ato que tirou todos os direitos civis). O povo reagiu com o movimento <span class="destaque">Diretas Já</span> e, em 1988, veio a Constituição Cidadã — a que garante nossos direitos até hoje.</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. A Independência do Brasil (1822) beneficiou principalmente:</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Os escravizados continuaram escravizados por mais 66 anos após a independência.')">A) Os escravizados, que foram imediatamente libertados.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Exato! A independência foi um acordo entre elites. O povo pobre e os escravizados não viram mudança nenhuma.')">B) As elites brasileiras, que passaram a controlar o poder sem depender de Portugal.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Os indígenas continuaram sendo perseguidos e tendo suas terras tomadas.')">C) Os povos indígenas, que recuperaram suas terras.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. Getúlio Vargas é lembrado por criar a CLT. O que essa lei garantiu aos trabalhadores?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. A CLT não deu terra a ninguém. Ela regulamentou o trabalho urbano.')">A) O direito de possuir terras no campo.</button>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Isso! A CLT foi um marco: salário mínimo, férias remuneradas, 13º salário e carteira assinada. Direitos que valem até hoje.')">B) Direitos como salário mínimo, férias, carteira assinada e jornada de trabalho regulamentada.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. Vargas não criou o voto universal. O voto feminino veio em 1932, mas a CLT é sobre trabalho.')">C) O direito ao voto para todas as pessoas, incluindo analfabetos.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. Durante a Ditadura Militar (1964-1985), o AI-5 foi o ato institucional mais duro. O que ele fez?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. O AI-5 fez exatamente o contrário: tirou direitos e calou a oposição.')">A) Garantiu liberdade de expressão e direito de protesto para todos os cidadãos.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. O AI-5 não teve nada a ver com economia. Foi um instrumento de repressão política.')">B) Criou o salário mínimo e regulamentou os direitos trabalhistas.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Correto! O AI-5 foi o golpe dentro do golpe: fechou o Congresso, censurou a imprensa e permitiu prender qualquer pessoa sem julgamento.')">C) Fechou o Congresso, censurou a imprensa e permitiu prisões sem mandado judicial.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_hist2') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_hist2', notaAtual); }
+            localStorage.setItem('edhumanas_status_hist2', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>

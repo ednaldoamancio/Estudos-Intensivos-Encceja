@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciências: Energia e Transformações - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #f57c00; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--accent), #e65100); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(245, 124, 0, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(245, 124, 0, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
+        .destaque { font-weight: bold; color: var(--accent); }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>Energia: O Combustível do Mundo ⚡🔋</h1>
+            <p>Pega a visão, Híngrid! Sem energia, nada funciona — nem seu celular, nem o planeta.</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: Energia e Transformações</h2>
+            <div class="node-central">Energia Não se Cria, se Transforma</div>
+            <div class="branches">
+                <div class="branch"><strong>Estados da Matéria:</strong><br>Sólido → Líquido → Gasoso. Gelo derrete (fusão), água ferve (evaporação). É tudo questão de temperatura.</div>
+                <div class="branch"><strong>Tipos de Energia:</strong><br>Cinética (movimento), Potencial (armazenada), Térmica (calor), Elétrica (tomada) e Química (comida/gasolina).</div>
+                <div class="branch"><strong>Fontes de Energia:</strong><br>Renováveis (sol, vento, água) vs. Não Renováveis (petróleo, carvão, gás). O futuro é renovável!</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>A regra de ouro da Ciência: <span class="destaque">energia não se cria nem se destrói, ela se transforma</span>. Quando você liga o ventilador, a energia elétrica vira energia cinética (movimento). Quando come um prato de arroz, a energia química do alimento vira energia pro seu corpo se mexer.</p>
+            <p>A matéria também se transforma. A água é o melhor exemplo: gelo (sólido) derrete e vira água (líquido) — isso é <span class="destaque">fusão</span>. Se esquentar mais, a água ferve e vira vapor (gasoso) — isso é <span class="destaque">evaporação</span>. E o caminho inverso também rola: vapor esfria e vira gotinha de água (<span class="destaque">condensação</span>).</p>
+            <p>Sobre fontes de energia: o Brasil é fera em <span class="destaque">energia hidrelétrica</span> (usinas que usam a força da água). Mas também tem energia solar, eólica (vento) e biomassa. Essas são <span class="destaque">renováveis</span> — não acabam. Já petróleo e carvão são <span class="destaque">não renováveis</span> e ainda poluem o ar.</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. Quando você esquenta água no fogão até ela ferver e virar vapor, qual é o nome dessa mudança de estado físico?</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Fusão é quando o sólido vira líquido (ex: gelo derretendo).')">A) Fusão.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Mandou bem! Evaporação (ou ebulição, quando é rápida) é a passagem do líquido pro gasoso.')">B) Evaporação.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Condensação é o contrário: o vapor esfria e volta a ser líquido (ex: gotinhas no copo gelado).')">C) Condensação.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. A conta de luz da sua casa mede o consumo de energia elétrica. Quando você liga uma lâmpada, que transformação de energia acontece?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Exato! A lâmpada transforma energia elétrica em luz (luminosa) e calor (térmica). Por isso ela esquenta!')">A) Energia elétrica se transforma em energia luminosa e térmica.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. Energia cinética é de movimento. A lâmpada não se mexe, ela brilha.')">B) Energia elétrica se transforma em energia cinética.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. Energia não é criada do nada. Ela vem da rede elétrica e se transforma.')">C) A lâmpada cria energia luminosa do nada.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. Por que a energia solar e a eólica são chamadas de "renováveis"?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. Elas custam pra instalar, mas o ponto é que a fonte (sol e vento) não acaba.')">A) Porque são mais baratas que todas as outras fontes de energia.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. Elas precisam de equipamentos (painéis solares, turbinas), mas a fonte é inesgotável.')">B) Porque não precisam de nenhum equipamento para funcionar.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Correto! O sol vai continuar brilhando e o vento vai continuar soprando. Diferente do petróleo, que um dia acaba.')">C) Porque suas fontes (sol e vento) não se esgotam e se renovam naturalmente.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_ciencias3') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_ciencias3', notaAtual); }
+            localStorage.setItem('edhumanas_status_ciencias3', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>

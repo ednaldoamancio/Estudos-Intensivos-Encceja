@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linguagens: Gêneros Textuais e Redação - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #ff6600; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--accent), var(--secondary)); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(255, 102, 0, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(255, 102, 0, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
+        .destaque { font-weight: bold; color: var(--accent); }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>Gêneros Textuais e Redação ✍️📝</h1>
+            <p>Híngrid, cada texto tem um formato e um objetivo. Dominar isso é garantir pontos na prova E na redação!</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: Os Tipos de Texto</h2>
+            <div class="node-central">Cada Texto Tem uma Missão</div>
+            <div class="branches">
+                <div class="branch"><strong>Narrativo:</strong><br>Conta uma história. Tem personagens, tempo e lugar. Ex: conto, crônica, fábula, notícia.</div>
+                <div class="branch"><strong>Dissertativo:</strong><br>Defende uma opinião com argumentos. É o tipo da REDAÇÃO do Encceja. Introdução → Desenvolvimento → Conclusão.</div>
+                <div class="branch"><strong>Instrucional:</strong><br>Ensina a fazer algo. Ex: receita de bolo, manual de celular, bula de remédio.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>A prova adora te dar um texto e perguntar: "Qual é o gênero textual?" Então grava isso: <span class="destaque">gênero textual</span> é o "formato" do texto. Uma receita de bolo é diferente de uma notícia de jornal, que é diferente de um poema. Cada um tem estrutura e objetivo próprios.</p>
+            <p>Os mais cobrados: <span class="destaque">notícia</span> (informa um fato), <span class="destaque">propaganda</span> (quer te convencer), <span class="destaque">tirinha/charge</span> (usa humor pra criticar), <span class="destaque">carta/e-mail</span> (comunicação pessoal ou formal) e <span class="destaque">artigo de opinião</span> (defende um ponto de vista).</p>
+        </div>
+
+        <div class="card">
+            <h2>A Redação do Encceja: Receita de Sucesso</h2>
+            <p>A redação é <span class="destaque">dissertativo-argumentativa</span>. Você recebe um tema e precisa defender sua opinião com argumentos. A estrutura é simples:</p>
+            <p><strong>1. Introdução (1 parágrafo):</strong> Apresente o tema e diga sua opinião sobre ele. Ex: "O acesso à educação no Brasil ainda é desigual e precisa de atenção urgente."</p>
+            <p><strong>2. Desenvolvimento (2 parágrafos):</strong> Dê argumentos que provem sua opinião. Use exemplos do dia a dia, dados ou fatos históricos.</p>
+            <p><strong>3. Conclusão (1 parágrafo):</strong> Retome sua opinião e proponha uma solução. Ex: "Portanto, é necessário que o governo invista em..."</p>
+            <p>Dica de ouro: <span class="destaque">NÃO use gírias na redação</span>. Escreva de forma clara e organizada. E NUNCA fuja do tema!</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. Você lê o seguinte texto: "Misture 2 xícaras de farinha, 3 ovos e 1 xícara de leite. Leve ao forno por 40 minutos." Qual é o gênero textual?</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Notícia informa um fato novo. Esse texto ensina a fazer algo.')">A) Notícia.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Isso! É um texto instrucional (receita). Ele dá ordens/instruções passo a passo.')">B) Receita (texto instrucional).</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Artigo de opinião defende um ponto de vista. Esse texto só ensina a fazer um bolo.')">C) Artigo de opinião.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. Na redação do Encceja, qual é a estrutura correta de um texto dissertativo-argumentativo?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. Começar com &quot;Era uma vez&quot; é narrativo, não dissertativo. A redação pede opinião e argumentos.')">A) Começa com "Era uma vez", conta uma história e termina com "Fim".</button>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Perfeito! Essa é a estrutura clássica: apresenta o tema, argumenta e conclui com proposta de solução.')">B) Introdução (apresenta o tema e a opinião), Desenvolvimento (argumentos) e Conclusão (proposta de solução).</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. Lista de ingredientes é receita. A redação precisa de parágrafos organizados com argumentos.')">C) Uma lista de ingredientes seguida de instruções passo a passo.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. Uma tirinha mostra um político prometendo "saúde para todos" enquanto fecha um hospital. Qual é a função desse gênero textual?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. A tirinha não está vendendo nada. Ela está fazendo uma crítica social.')">A) Vender um produto ou serviço ao leitor.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. Ensinar a fazer algo é função de texto instrucional. A tirinha usa humor pra criticar.')">B) Ensinar o leitor a fazer algo passo a passo.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Exato! A tirinha/charge usa humor e ironia pra fazer CRÍTICA SOCIAL. Ela mostra a contradição entre o discurso e a ação do político.')">C) Fazer uma crítica social usando humor e ironia.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_ling2') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_ling2', notaAtual); }
+            localStorage.setItem('edhumanas_status_ling2', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática: Gráficos e Tabelas - edhumanas</title>
+    <style>
+        :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #00cc66; --correct: #00cc66; --incorrect: #ff3333; }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        .btn-voltar { background-color: #555; }
+        .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        .header-resumo h1 { margin: 0; color: var(--primary); }
+
+        .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
+        .mapa-mental h2 { color: var(--accent); margin-top: 0; }
+        .node-central { background: linear-gradient(135deg, var(--accent), #00994d); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .branch { background-color: rgba(0, 204, 102, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
+        body.dark-mode .branch { background-color: rgba(0, 204, 102, 0.2); }
+
+        .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
+        .destaque { font-weight: bold; color: var(--accent); }
+
+        .tabela-exemplo { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .tabela-exemplo th { background: var(--accent); color: white; padding: 10px; text-align: center; }
+        .tabela-exemplo td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        body.dark-mode .tabela-exemplo td { border-color: #444; }
+
+        .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+        .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .option-btn:hover { background-color: rgba(127, 0, 255, 0.1); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .option-btn.correct { background-color: var(--correct); color: white; border-color: var(--correct); }
+        .option-btn.incorrect { background-color: var(--incorrect); color: white; border-color: var(--incorrect); }
+        .feedback { margin-top: 10px; padding: 15px; border-radius: 5px; font-weight: bold; display: none; font-size: 0.95em; }
+        .feedback.success { background-color: rgba(0, 204, 102, 0.1); color: #00994d; border-left: 4px solid var(--correct); }
+        .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
+        body.dark-mode .feedback.success { color: #33ff99; }
+        body.dark-mode .feedback.error { color: #ff6666; }
+
+        .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .conclusao-btn:hover { background-color: #00994d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn-voltar" onclick="window.history.back()">⬅️ Voltar</button>
+            <button onclick="document.body.classList.toggle('dark-mode')">🌙 Tela Noturna</button>
+        </div>
+
+        <div class="header-resumo">
+            <h1>Gráficos e Tabelas: Lendo os Dados 📊📈</h1>
+            <p>Híngrid, a prova ADORA colocar gráficos e tabelas. Quem sabe ler, acerta fácil!</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h2>🧠 Mapa Mental: Interpretação de Dados</h2>
+            <div class="node-central">Dados Contam Histórias</div>
+            <div class="branches">
+                <div class="branch"><strong>Gráfico de Barras:</strong><br>Compara quantidades. A barra maior = maior valor. Fácil de ler: é só olhar a altura.</div>
+                <div class="branch"><strong>Gráfico de Pizza:</strong><br>Mostra partes de um todo (100%). A fatia maior = maior porcentagem. Pense num bolo dividido.</div>
+                <div class="branch"><strong>Tabela:</strong><br>Organiza dados em linhas e colunas. Cruze a linha com a coluna pra achar o valor. É tipo uma planilha.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Papo Reto: Resumo da Matéria</h2>
+            <p>Ler gráficos e tabelas é uma habilidade que vale ouro na prova. A boa notícia: não precisa de fórmula complicada. É <span class="destaque">interpretação</span> pura.</p>
+            <p>No <span class="destaque">gráfico de barras</span>, cada barra representa uma categoria. A barra mais alta = maior valor. No <span class="destaque">gráfico de pizza</span>, o círculo inteiro é 100%. Cada fatia é uma porcentagem. No <span class="destaque">gráfico de linhas</span>, a linha subindo = crescimento, descendo = queda.</p>
+            <p>Nas <span class="destaque">tabelas</span>, a chave é cruzar linhas e colunas. Exemplo:</p>
+
+            <table class="tabela-exemplo">
+                <tr><th>Mês</th><th>Vendas (R$)</th><th>Lucro (R$)</th></tr>
+                <tr><td>Janeiro</td><td>5.000</td><td>1.200</td></tr>
+                <tr><td>Fevereiro</td><td>7.000</td><td>2.100</td></tr>
+                <tr><td>Março</td><td>4.500</td><td>900</td></tr>
+            </table>
+
+            <p>Se a prova perguntar "Em qual mês o lucro foi maior?", é só olhar a coluna "Lucro" e achar o maior número: Fevereiro (R$ 2.100). Também pode pedir a <span class="destaque">média</span>: some tudo e divida pela quantidade. Média de vendas = (5.000 + 7.000 + 4.500) / 3 = R$ 5.500.</p>
+        </div>
+
+        <div class="quiz-section">
+            <h2>Autoavaliação: Testa seu conhecimento!</h2>
+
+            <div class="question-box" id="q1">
+                <p><strong>1. Observe a tabela acima. Qual foi o mês com MENOR lucro?</strong></p>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Janeiro teve lucro de R$ 1.200. Tem um mês com lucro menor.')">A) Janeiro.</button>
+                <button class="option-btn" onclick="avaliar(1, false, this, 'Incorreto. Fevereiro teve o MAIOR lucro (R$ 2.100), não o menor.')">B) Fevereiro.</button>
+                <button class="option-btn" onclick="avaliar(1, true, this, 'Correto! Março teve lucro de R$ 900, o menor dos três meses. É só comparar os números da coluna Lucro.')">C) Março.</button>
+                <div class="feedback" id="feed-1"></div>
+            </div>
+
+            <div class="question-box" id="q2">
+                <p><strong>2. Um gráfico de pizza mostra que 50% dos alunos de uma escola preferem futebol, 30% preferem vôlei e 20% preferem basquete. Se a escola tem 200 alunos, quantos preferem vôlei?</strong></p>
+                <button class="option-btn" onclick="avaliar(2, true, this, 'Mandou bem! 30% de 200 = 0,30 x 200 = 60 alunos. Gráfico de pizza + porcentagem = combo da prova!')">A) 60 alunos.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. 100 alunos seria 50% (a fatia do futebol). Vôlei é 30%.')">B) 100 alunos.</button>
+                <button class="option-btn" onclick="avaliar(2, false, this, 'Incorreto. 30 seria 15% de 200. Vôlei é 30%, então: 0,30 x 200 = 60.')">C) 30 alunos.</button>
+                <div class="feedback" id="feed-2"></div>
+            </div>
+
+            <div class="question-box" id="q3">
+                <p><strong>3. A média aritmética é muito cobrada na prova. Se suas notas em 4 provas foram: 6, 8, 7 e 9, qual é a sua média?</strong></p>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. 8 é uma das notas, não a média. Pra calcular a média, some tudo e divida por 4.')">A) 8,0.</button>
+                <button class="option-btn" onclick="avaliar(3, true, this, 'Exato! Média = (6 + 8 + 7 + 9) / 4 = 30 / 4 = 7,5. Some tudo e divida pela quantidade!')">B) 7,5.</button>
+                <button class="option-btn" onclick="avaliar(3, false, this, 'Incorreto. 30 é a soma total das notas. Falta dividir por 4 (quantidade de provas): 30 / 4 = 7,5.')">C) 30.</button>
+                <div class="feedback" id="feed-3"></div>
+            </div>
+
+            <button class="conclusao-btn" id="btn-concluir" style="display:none;" onclick="salvarEvoltar()">✅ Finalizar e Salvar Nota</button>
+        </div>
+    </div>
+
+    <script>
+        let acertos = 0;
+        let respondidas = 0;
+        const totalQuestoes = 3;
+
+        function avaliar(qId, isCerto, btnClicado, explicacao) {
+            const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
+            botoes.forEach(b => b.disabled = true);
+            const feedback = document.getElementById(`feed-${qId}`);
+            feedback.style.display = 'block';
+            feedback.innerHTML = explicacao;
+
+            if (isCerto) {
+                btnClicado.classList.add('correct');
+                feedback.className = 'feedback success';
+                acertos++;
+            } else {
+                btnClicado.classList.add('incorrect');
+                feedback.className = 'feedback error';
+                botoes.forEach(b => {
+                    if(b.getAttribute('onclick').includes('true')) {
+                        b.style.border = '2px solid var(--correct)'; b.style.color = 'var(--correct)';
+                    }
+                });
+            }
+
+            respondidas++;
+            if (respondidas === totalQuestoes) {
+                document.getElementById('btn-concluir').style.display = 'block';
+                window.scrollBy({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function salvarEvoltar() {
+            let notaAtual = (acertos / totalQuestoes) * 10;
+            let notaAntiga = localStorage.getItem('edhumanas_nota_mat3') || 0;
+            if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_mat3', notaAtual); }
+            localStorage.setItem('edhumanas_status_mat3', 'concluido');
+            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
+        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
+    </nav>
+</html>
