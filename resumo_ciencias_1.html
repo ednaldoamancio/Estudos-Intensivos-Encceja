@@ -4,28 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ciências: Corpo Humano e Saúde - edhumanas</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff; --primary: #ff007f; --secondary: #7f00ff; --accent: #009688; --correct: #00cc66; --incorrect: #ff3333; }
         body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; transition: 0.3s; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
+        .container { max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
         .controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
         button { background-color: var(--secondary); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 25px; cursor: pointer; transition: 0.2s; }
         button:hover { transform: scale(1.05); }
         .btn-voltar { background-color: #555; }
         .header-resumo { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
         .header-resumo h1 { margin: 0; color: var(--primary); }
-
         .mapa-mental { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed var(--accent); text-align: center; }
         .mapa-mental h2 { color: var(--accent); margin-top: 0; }
-        .node-central { background: linear-gradient(135deg, var(--accent), #00695c); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; }
-        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .node-central { background: linear-gradient(135deg, var(--accent), #00695c); color: white; padding: 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2em; transition: 0.3s; }
+        .node-link { background: linear-gradient(135deg, var(--primary), #cc0066); text-decoration: none; cursor: pointer; display: inline-block; margin-top: 10px;}
+        .node-link:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4); }
+        .branches { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
         .branch { background-color: rgba(0, 150, 136, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent); width: 30%; min-width: 200px; font-size: 0.9em; text-align: left;}
         body.dark-mode .branch { background-color: rgba(0, 150, 136, 0.2); }
-
         .card { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-top: 4px solid var(--accent); }
         .destaque { font-weight: bold; color: var(--accent); }
-
         .quiz-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
         .question-box { background-color: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
         .option-btn { width: 100%; text-align: left; background: transparent; color: var(--text-color); border: 2px solid var(--secondary); padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
@@ -38,9 +38,10 @@
         .feedback.error { background-color: rgba(255, 51, 51, 0.1); color: #cc0000; border-left: 4px solid var(--incorrect); }
         body.dark-mode .feedback.success { color: #33ff99; }
         body.dark-mode .feedback.error { color: #ff6666; }
-
         .conclusao-btn { width: 100%; text-align: center; background-color: var(--correct); color: white; border: none; margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .conclusao-btn:hover { background-color: #00994d; }
+        .conclusao-btn:hover { background-color: #00994d; transform: scale(1.02); }
+        .nav-bottom { background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; box-shadow: 0 -4px 10px rgba(0,0,0,0.2); }
+        .nav-bottom a { color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em; }
     </style>
 </head>
 <body>
@@ -62,6 +63,11 @@
                 <div class="branch"><strong>Sistemas do Corpo:</strong><br>Digestório (comida vira energia), Respiratório (oxigênio pro sangue), Circulatório (sangue leva tudo pro corpo todo).</div>
                 <div class="branch"><strong>Defesa do Corpo:</strong><br>Sistema Imunológico: seus soldados internos. Vacina treina o exército antes da guerra chegar.</div>
                 <div class="branch"><strong>Saúde Pública:</strong><br>Saneamento básico, água tratada e vacinação são os pilares pra evitar epidemias.</div>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--accent);">
+                <p style="font-weight: bold; font-size: 1.1em; color: var(--text-color);">Quer se aprofundar de verdade? Confira a aula completa em slides! 👇</p>
+                <a href="https://edhumanasorgaoshumanos.manus.space/" target="_blank" class="node-central node-link" onclick="lancarConfete()">🚀 Aprenda Mais 🚀</a>
             </div>
         </div>
 
@@ -107,10 +113,25 @@
         </div>
     </div>
 
+    <nav class="nav-bottom">
+        <a href="index.html">🏠 Início</a>
+        <a href="cronograma.html">📅 Rotina</a>
+    </nav>
+
     <script>
         let acertos = 0;
         let respondidas = 0;
         const totalQuestoes = 3;
+
+        // Função mágica dos confetes! 🎉
+        function lancarConfete() {
+            confetti({
+                particleCount: 150,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#ff007f', '#7f00ff', '#009688', '#00cc66']
+            });
+        }
 
         function avaliar(qId, isCerto, btnClicado, explicacao) {
             const botoes = document.querySelectorAll(`#q${qId} .option-btn`);
@@ -137,6 +158,11 @@
             if (respondidas === totalQuestoes) {
                 document.getElementById('btn-concluir').style.display = 'block';
                 window.scrollBy({ top: 100, behavior: 'smooth' });
+                
+                // Dispara confetes se a pessoa acertar todas!
+                if(acertos === totalQuestoes) {
+                    setTimeout(lancarConfete, 500);
+                }
             }
         }
 
@@ -145,13 +171,12 @@
             let notaAntiga = localStorage.getItem('edhumanas_nota_ciencias1') || 0;
             if (notaAtual > notaAntiga) { localStorage.setItem('edhumanas_nota_ciencias1', notaAtual); }
             localStorage.setItem('edhumanas_status_ciencias1', 'concluido');
-            alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
-            window.location.href = 'index.html';
+            lancarConfete(); // Mais confetes ao salvar!
+            setTimeout(() => {
+                alert('Você acertou ' + acertos + ' de ' + totalQuestoes + ' questões. Nota salva!');
+                window.location.href = 'index.html';
+            }, 800);
         }
     </script>
 </body>
-<nav style="background: linear-gradient(135deg, #7f00ff, #ff007f); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">🏠 Início</a>
-        <a href="cronograma.html" style="color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 1.1em;">📅 Rotina</a>
-    </nav>
 </html>
